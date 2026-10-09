@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, RangeBarChart, CandlestickChart, Command, commandScore, DataTable, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, RangeBarChart, CandlestickChart, Command, commandScore, DataTable, Sidebar, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
 
 afterEach(() => cleanup())
 
@@ -548,4 +548,12 @@ test("DataTable composes search, sortable columns, row selection, and pagination
   fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Cy" } })
   await waitFor(() => expect(screen.getByText("Cy")).toBeTruthy())
   expect(screen.queryByText("Ada")).toBeNull()
+})
+
+test("Sidebar provider shares controlled layout state with its trigger", () => {
+  render(<Provider><Sidebar.Provider defaultOpen><Sidebar.Root><Sidebar.Header>Workspace</Sidebar.Header><Sidebar.Content><Sidebar.Group><Sidebar.GroupLabel>Projects</Sidebar.GroupLabel><Sidebar.Menu><Sidebar.MenuItem><Sidebar.MenuButton href="/alpha" isActive>Alpha</Sidebar.MenuButton></Sidebar.MenuItem></Sidebar.Menu></Sidebar.Group></Sidebar.Content></Sidebar.Root><Sidebar.Inset><Sidebar.Trigger /><main>Page content</main></Sidebar.Inset></Sidebar.Provider></Provider>)
+  expect(screen.getByRole("complementary").getAttribute("data-state")).toBe("expanded")
+  expect(screen.getByRole("link", { name: "Alpha" }).getAttribute("aria-current")).toBe("page")
+  fireEvent.click(screen.getByRole("button", { name: "Toggle sidebar" }))
+  expect(screen.getByRole("button", { name: "Toggle sidebar" }).getAttribute("aria-expanded")).toBe("false")
 })
