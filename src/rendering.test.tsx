@@ -89,6 +89,7 @@ test("default Provider supplies the base theme and CSS reset", () => {
   expect(reset?.textContent).toContain(":where(button,[type=button],[type=reset],[type=submit]){appearance:button;background-color:transparent;background-image:none}")
   expect(reset?.textContent).not.toMatch(/(?:^|\})button,\[type=button\],\[type=reset\],\[type=submit\]\{/)
   expect(reset?.textContent).toContain("@keyframes indoku-skeleton-shimmer")
+  expect(reset?.textContent).toContain("@keyframes indoku-progress-indeterminate")
   expect(reset?.textContent).toContain("@media(prefers-reduced-motion:reduce)")
   expect(theme?.textContent).toContain("--indoku-colors-brand-500:#737373")
   expect(theme?.textContent).toContain("--indoku-colors-fg-default:var(--indoku-colors-gray-900)")

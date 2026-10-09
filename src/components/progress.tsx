@@ -41,7 +41,7 @@ export type ProgressRangeProps = React.HTMLAttributes<HTMLDivElement>
 export function ProgressRange(props: ProgressRangeProps) {
   const { percent, variant, indeterminate } = useProgressContext()
   const color = variant === "success" ? "status.success" : variant === "warning" ? "status.warning" : variant === "danger" ? "status.danger" : "accent.default"
-  return <RangeView h="100%" borderRadius="full" bg={color} transition="width 200ms ease" w={indeterminate ? "35%" : `${percent}%`} data-state={indeterminate ? "indeterminate" : "loading"} {...props} />
+  return <RangeView h="100%" borderRadius="full" bg={color} transition="width 200ms ease" w={indeterminate ? "35%" : `${percent}%`} data-state={indeterminate ? "indeterminate" : percent >= 100 ? "complete" : "loading"} animation={indeterminate ? "indoku-progress-indeterminate 1.4s ease-in-out infinite" : "none"} {...props} />
 }
 export type ProgressLabelProps = React.HTMLAttributes<HTMLSpanElement>
 export function ProgressLabel(props: ProgressLabelProps) { return <LabelView as="span" {...props} /> }
