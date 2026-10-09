@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D } from "./index"
 
 afterEach(() => cleanup())
 
@@ -457,4 +457,12 @@ test("FileTree renders nested nodes and expands folders with accessible tree sem
   fireEvent.click(folder)
   expect(screen.getByText("app.tsx")).toBeTruthy()
   expect(screen.getByText("package.json")).toBeTruthy()
+})
+
+test("Graph2D plots functions and points with a labelled legend", () => {
+  render(<Provider><Graph2D functions={[{ fn: (x) => x * x, label: "y = x²", color: "accent" }]} points={[{ x: 1, y: 1, label: "P" }]} interactive={false} /></Provider>)
+  expect(screen.getByRole("img", { name: "Cartesian graph" })).toBeTruthy()
+  expect(screen.getByText("y = x²")).toBeTruthy()
+  expect(screen.getByText("P")).toBeTruthy()
+  expect(document.querySelector("svg path")?.getAttribute("d")).toContain("M")
 })

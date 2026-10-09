@@ -100,6 +100,8 @@ export type { InputOTPRootProps, InputOTPGroupProps, InputOTPSlotProps, InputOTP
 export { Attachment, AttachmentRoot, AttachmentMedia, AttachmentContent, AttachmentName, AttachmentMeta, AttachmentStatusView, AttachmentActions, AttachmentAction, AttachmentRemove, AttachmentGroup } from "./components/attachment"
 export type { AttachmentStatus, AttachmentRootProps, AttachmentMediaProps, AttachmentContentProps, AttachmentNameProps, AttachmentMetaProps, AttachmentStatusProps, AttachmentActionsProps, AttachmentActionProps, AttachmentGroupProps } from "./components/attachment"
 export { FileTree } from "./components/file-tree"
+export { Graph2D, CartesianCanvas } from "./components/graph2d"
+export type { Graph2DProps, GraphFunction, GraphPoint, GraphViewport } from "./components/graph2d"
 export type { FileTreeNode, FileTreeProps } from "./components/file-tree"
 export { Flash } from "./components/flash"
 export type { FlashProps, FlashType } from "./components/flash"
