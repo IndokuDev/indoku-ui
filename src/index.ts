@@ -113,6 +113,8 @@ export { ScrollArea, ScrollAreaRoot, ScrollAreaViewport, ScrollAreaContent, Scro
 export type { ScrollAreaRootProps, ScrollAreaViewportProps, ScrollAreaContentProps, ScrollAreaScrollbarProps, ScrollAreaThumbProps, ScrollAreaCornerProps } from "./components/scroll-area"
 export { Direction, DirectionRoot, useDirection, useDocumentDirection } from "./components/direction"
 export type { Direction as DirectionValue, DirectionRootProps } from "./components/direction"
+export { QrCode, QrCodeRoot, QrCodeFrame, QrCodeOverlay, useQrMatrix } from "./components/qr-code"
+export type { QrCodeRootProps, QrCodeFrameProps, QrCodeOverlayProps } from "./components/qr-code"
 export { Prose } from "./components/prose"
 export type { ProseProps } from "./components/prose"
 export { MathRenderer, FormulaBlock } from "./components/math"

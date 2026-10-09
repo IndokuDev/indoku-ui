@@ -1,9 +1,18 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("QrCode renders an accessible SVG and supports the raw matrix hook", () => {
+  render(<Provider><QrCode.Root value="https://indoku.dev" label="Indoku QR"><QrCode.Frame data-testid="qr-frame" /><QrCode.Overlay><span>Logo</span></QrCode.Overlay></QrCode.Root></Provider>)
+  expect(screen.getByRole("img", { name: "Indoku QR" })).toBeTruthy()
+  expect(screen.getByTestId("qr-frame").querySelector("path")?.getAttribute("d")).toBeTruthy()
+  function MatrixSize() { const matrix = useQrMatrix("hello"); return <span data-testid="matrix-size">{matrix.size}</span> }
+  render(<Provider><MatrixSize /></Provider>)
+  expect(Number(screen.getByTestId("matrix-size").textContent)).toBeGreaterThanOrEqual(21)
+})
 
 test("Prose and Math components provide styled content and safe LaTeX fallback", () => {
   render(<Provider><Prose><h2>Article</h2><p>Rich <strong>content</strong>.</p><blockquote>Quoted text</blockquote></Prose><MathRenderer latex="x^2 + y^2" /><FormulaBlock latex="a^2+b^2=c^2" title="Pythagorean theorem" variables={[{ symbol: "a", meaning: "First side" }]} /></Provider>)
