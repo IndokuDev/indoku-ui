@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -34,6 +34,20 @@ test("Prose and Math components provide styled content and safe LaTeX fallback",
   expect(screen.getByText("Quoted text")).toBeTruthy()
   expect(screen.getByText("x^2 + y^2")).toBeTruthy()
   expect(screen.getByText("Pythagorean theorem")).toBeTruthy()
+})
+
+test("MessageScroller preserves scroll context and offers jump-to-latest", () => {
+  render(<Provider><MessageScroller.Root><div style={{ height: 800 }}>History</div><MessageScroller.ScrollToBottomButton /></MessageScroller.Root></Provider>)
+  const viewport = document.querySelector<HTMLElement>("[data-message-viewport]")!
+  Object.defineProperty(viewport, "scrollHeight", { configurable: true, value: 800 })
+  Object.defineProperty(viewport, "clientHeight", { configurable: true, value: 200 })
+  Object.defineProperty(viewport, "scrollTop", { configurable: true, writable: true, value: 0 })
+  Object.defineProperty(viewport, "scrollTo", { configurable: true, value: (options: ScrollToOptions | number) => { viewport.scrollTop = typeof options === "number" ? options : options.top ?? 0 } })
+  fireEvent.scroll(viewport)
+  const jump = screen.getByRole("button", { name: "New messages" })
+  fireEvent.click(jump)
+  expect(viewport.scrollTop).toBe(800)
+  expect(screen.queryByRole("button", { name: "New messages" })).toBeNull()
 })
 
 test("Questionnaire validates required choices and supports letter shortcuts", () => {

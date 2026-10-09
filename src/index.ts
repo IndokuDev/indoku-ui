@@ -127,6 +127,8 @@ export { Empty, EmptyRoot, EmptyIndicator, EmptyTitle, EmptyDescription, EmptyCo
 export type { EmptyRootProps, EmptyIndicatorProps, EmptyTitleProps, EmptyDescriptionProps, EmptyContentProps } from "./components/empty"
 export { Bubble, BubbleRoot, BubbleContent, BubbleFooter, BubbleAction, BubbleCollapsible } from "./components/bubble"
 export type { BubbleAlign, BubbleVariant, BubbleRootProps, BubbleContentProps, BubbleFooterProps, BubbleActionProps, BubbleCollapsibleProps } from "./components/bubble"
+export { MessageScroller, MessageScrollerRoot, ScrollToBottomButton, useMessageScroller } from "./components/message-scroller"
+export type { MessageScrollerRootProps, ScrollToBottomButtonProps } from "./components/message-scroller"
 export { Message, MessageRoot, MessageAvatar, MessageContent, MessageHeader, MessageFooter, MessageGroup } from "./components/message"
 export type { MessageAlign, AvatarPosition as MessageAvatarPosition, MessageRootProps, MessageAvatarProps, MessageContentProps, MessageHeaderProps, MessageFooterProps, MessageGroupProps } from "./components/message"
 export { NavigationMenu, NavigationMenuRoot, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink, NavigationMenuIndicator, NavigationMenuItemIndicator, NavigationMenuViewport, NavigationMenuViewportPositioner, NavigationMenuArrow } from "./components/navigation-menu"
