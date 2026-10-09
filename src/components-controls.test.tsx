@@ -1,9 +1,17 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, Questionnaire, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Prose and Math components provide styled content and safe LaTeX fallback", () => {
+  render(<Provider><Prose><h2>Article</h2><p>Rich <strong>content</strong>.</p><blockquote>Quoted text</blockquote></Prose><MathRenderer latex="x^2 + y^2" /><FormulaBlock latex="a^2+b^2=c^2" title="Pythagorean theorem" variables={[{ symbol: "a", meaning: "First side" }]} /></Provider>)
+  expect(screen.getByRole("heading", { name: "Article" })).toBeTruthy()
+  expect(screen.getByText("Quoted text")).toBeTruthy()
+  expect(screen.getByText("x^2 + y^2")).toBeTruthy()
+  expect(screen.getByText("Pythagorean theorem")).toBeTruthy()
+})
 
 test("Questionnaire validates required choices and supports letter shortcuts", () => {
   const onSubmit = vi.fn()
