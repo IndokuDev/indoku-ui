@@ -38,7 +38,7 @@ export interface ColorModeProps extends Omit<React.HTMLAttributes<HTMLDivElement
 }
 
 /** Forces a subtree to use a light or dark color-scheme context. */
-export function ColorMode({ value, children, className, style, ...props }: ColorModeProps) {
+export function ColorModeScope({ value, children, className, style, ...props }: ColorModeProps) {
   const classes = [className, value].filter(Boolean).join(" ")
   return (
     <div
@@ -53,11 +53,11 @@ export function ColorMode({ value, children, className, style, ...props }: Color
 }
 
 export function LightMode(props: Omit<ColorModeProps, "value">) {
-  return <ColorMode value="light" {...props} />
+  return <ColorModeScope value="light" {...props} />
 }
 
 export function DarkMode(props: Omit<ColorModeProps, "value">) {
-  return <ColorMode value="dark" {...props} />
+  return <ColorModeScope value="dark" {...props} />
 }
 
 /** Returns a value selected for the active color mode. */

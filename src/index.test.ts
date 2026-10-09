@@ -1,3 +1,4 @@
+import type { ColorMode as LegacyColorMode } from "./index"
 import { expect, test } from "vitest"
 import { encodeQr, tokenize, tokenizeLines, version } from "./index"
 
@@ -19,4 +20,9 @@ test("keeps legacy form and questionnaire type aliases in the public entry", asy
   const entry = await import("./index")
   expect(entry.Form).toBeDefined()
   expect(entry.Questionnaire).toBeDefined()
+})
+
+const legacyColorMode: LegacyColorMode = "dark"
+test("exports the legacy ColorMode type union", () => {
+  expect(legacyColorMode).toBe("dark")
 })
