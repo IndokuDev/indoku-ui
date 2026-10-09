@@ -22,7 +22,7 @@ export function DialogBackdrop(props: DialogBackdropProps) { return <BackdropEle
 export type DialogPositionerProps = React.ComponentProps<typeof ArkDialog.Positioner>
 export function DialogPositioner(props: DialogPositionerProps) { return <PositionerElement position="fixed" inset="0" zIndex={50} display="flex" alignItems="center" justifyContent="center" p="16px" {...props} /> }
 export type DialogContentProps = React.ComponentProps<typeof ArkDialog.Content>
-export function DialogContent(props: DialogContentProps) { return <ContentElement width="100%" maxW="480px" maxH="calc(100vh - 32px)" overflowY="auto" border="1px solid" borderColor="border.subtle" borderRadius="xl" bg="bg.surface" color="fg.default" boxShadow="lg" p="24px" outline="none" _focusVisible={{ outline: "2px solid", outlineColor: "accent.default", outlineOffset: "2px" }} {...props} /> }
+export function DialogContent(props: DialogContentProps) { return <ContentElement width="100%" maxW="480px" maxH="calc(100vh - 32px)" overflowY="auto" border="1px solid" borderColor="border.subtle" borderRadius="xl" bg="bg.surface" color="fg.default" boxShadow="lg" p="24px" outline="none" css={{ '&[data-state="closed"]': { display: "none" } }} _focusVisible={{ outline: "2px solid", outlineColor: "accent.default", outlineOffset: "2px" }} {...props} /> }
 export type DialogHeaderProps = React.HTMLAttributes<HTMLDivElement>
 export function DialogHeader(props: DialogHeaderProps) { return <HeaderElement display="flex" flexDirection="column" gap="6px" mb="16px" {...props} /> }
 export type DialogBodyProps = React.HTMLAttributes<HTMLDivElement>
