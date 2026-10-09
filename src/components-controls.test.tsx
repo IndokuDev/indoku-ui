@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -112,4 +112,26 @@ test("Carousel renders slide content and accessible navigation", () => {
   expect(screen.getByText("Slide one")).toBeTruthy()
   expect(screen.getByText("Slide two")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Next slide" })).toBeTruthy()
+})
+
+
+test("ToggleGroup supports single and multiple selection through compound items", () => {
+  const onValueChange = vi.fn()
+  render(<Provider><ToggleGroup.Root defaultValue={["bold"]} onValueChange={onValueChange} aria-label="Text style"><ToggleGroup.Item value="bold">Bold</ToggleGroup.Item><ToggleGroup.Item value="italic">Italic</ToggleGroup.Item></ToggleGroup.Root></Provider>)
+  const bold = screen.getByRole("button", { name: "Bold" })
+  const italic = screen.getByRole("button", { name: "Italic" })
+  expect(bold.getAttribute("aria-pressed")).toBe("true")
+  expect(italic.getAttribute("aria-pressed")).toBe("false")
+  fireEvent.click(italic)
+  expect(italic.getAttribute("aria-pressed")).toBe("true")
+  expect(bold.getAttribute("aria-pressed")).toBe("false")
+  expect(onValueChange).toHaveBeenCalledWith(["italic"])
+})
+
+test("ToggleGroup supports multiple values and disabled state", () => {
+  const onValueChange = vi.fn()
+  render(<Provider><ToggleGroup.Root type="multiple" defaultValue={["bold"]} onValueChange={onValueChange}><ToggleGroup.Item value="bold">Bold</ToggleGroup.Item><ToggleGroup.Item value="italic" disabled>Italic</ToggleGroup.Item></ToggleGroup.Root></Provider>)
+  fireEvent.click(screen.getByRole("button", { name: "Bold" }))
+  expect(onValueChange).toHaveBeenCalledWith([])
+  expect((screen.getByRole("button", { name: "Italic" }) as HTMLButtonElement).disabled).toBe(true)
 })

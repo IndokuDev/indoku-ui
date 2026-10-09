@@ -244,7 +244,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [ ] ColorSwatch — Root, Trigger/Swatch, ValueText/Label; accessible color display and optional checkerboard.
 - [ ] CodeBlock — Root, Header, Title, Content/Code, CopyTrigger, Language; copy feedback and long-code overflow.
 - [ ] Toggle — Root and controlled/uncontrolled pressed state, keyboard and ARIA.
-- [ ] ToggleGroup — Root, Item; single/multiple selection, orientation, roving focus.
+- [ ] ToggleGroup — Root, Item; single/multiple selection, orientation, roving focus. (Initial compound API and basic controlled/uncontrolled tests added; roving focus and legacy parity remain.)
 
 ### Batch 2 — Compound interactive controls
 
@@ -325,6 +325,8 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 
 - [x] Initial compound API adapters added for Card, Item, Stat, DataList, ButtonGroup, and Accordion.
 - [ ] Audit those adapters against the actual `ui-old` API; current additions are a starting point, not proof of 1:1 parity.
+- [x] Add ToggleGroup compound API (`Root`/`Item`) using Indoku primitives and shared context; add initial single/multiple/disabled behavior tests.
+- [x] Add `Item.Actions` compound slot matching the legacy Item API.
 - [ ] Rewrite Carousel against the legacy composable API and verify every requested interaction/indicator layout.
 - [ ] Add Lucide icons as the shared icon dependency where appropriate, beginning with ColorModeButton sun/moon icons.
 - [ ] Start Batch 0 full inventory and proceed sequentially through batches; keep this checklist accurate as work lands.
