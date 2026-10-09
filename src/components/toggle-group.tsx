@@ -70,7 +70,18 @@ function ToggleGroupRoot({ type = "single", value: controlledValue, defaultValue
     event.preventDefault()
     items[next]?.focus()
   }
-  return <ToggleGroupContext.Provider value={context}><RootElement {...props} ref={rootRef} role="group" aria-orientation={orientation} data-orientation={orientation} onKeyDown={handleKeyDown} style={{ display: "inline-flex", flexDirection: orientation === "vertical" ? "column" : "row", gap: `${spacing}px`, ...style }}>{children}</RootElement></ToggleGroupContext.Provider>
+  const vertical = orientation === "vertical"
+  const connectedStyles = spacing === 0 ? {
+    "& > button": { borderRadius: 0, ...(vertical ? { marginBlockStart: "-1px" } : { marginInlineStart: "-1px" }) },
+    "& > button:first-of-type": vertical
+      ? { borderTopStartRadius: "var(--indoku-radii-md, 6px)", borderTopEndRadius: "var(--indoku-radii-md, 6px)", marginBlockStart: 0 }
+      : { borderStartStartRadius: "var(--indoku-radii-md, 6px)", borderEndStartRadius: "var(--indoku-radii-md, 6px)", marginInlineStart: 0 },
+    "& > button:last-of-type": vertical
+      ? { borderEndStartRadius: "var(--indoku-radii-md, 6px)", borderEndEndRadius: "var(--indoku-radii-md, 6px)" }
+      : { borderStartEndRadius: "var(--indoku-radii-md, 6px)", borderEndEndRadius: "var(--indoku-radii-md, 6px)" },
+    "& > button:focus-visible": { zIndex: 1 },
+  } : undefined
+  return <ToggleGroupContext.Provider value={context}><RootElement {...props} ref={rootRef} role="group" aria-orientation={orientation} data-orientation={orientation} onKeyDown={handleKeyDown} css={connectedStyles} style={{ display: "inline-flex", flexDirection: vertical ? "column" : "row", gap: `${spacing}px`, ...style }}>{children}</RootElement></ToggleGroupContext.Provider>
 }
 export interface ToggleGroupItemProps extends Omit<ButtonProps, "value" | "onClick"> { value: string; onClick?: React.MouseEventHandler<HTMLButtonElement> }
 function ToggleGroupItem({ value, onClick, disabled, variant, size, ...props }: ToggleGroupItemProps) {

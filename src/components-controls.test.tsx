@@ -327,6 +327,15 @@ test("ToggleGroup roves focus with orientation-aware arrow keys", () => {
   expect(document.activeElement).toBe(right)
 })
 
+test("ToggleGroup spacing zero joins adjacent borders", () => {
+  render(<Provider><ToggleGroup.Root spacing={0}><ToggleGroup.Item value="left">Left</ToggleGroup.Item><ToggleGroup.Item value="right">Right</ToggleGroup.Item></ToggleGroup.Root></Provider>)
+  const group = screen.getByRole("group")
+  expect(group.style.gap).toBe("0px")
+  const css = Array.from(document.querySelectorAll('style[data-emotion^="indoku"]')).map((node) => node.textContent ?? "").join("\n")
+  expect(css).toContain("border-radius:0")
+  expect(css).toContain("border-start-start-radius:var(--indoku-radii-md, 6px)")
+})
+
 test("Progress exposes compound track, range, label, and value text", () => {
   render(<Provider><Progress.Root value={40} label="Upload"><Progress.Label>Upload</Progress.Label><Progress.Track><Progress.Range data-testid="progress-range" /></Progress.Track><Progress.ValueText data-testid="progress-value" /></Progress.Root></Provider>)
   expect(screen.getByRole("progressbar", { name: "Upload" }).getAttribute("aria-valuenow")).toBe("40")
