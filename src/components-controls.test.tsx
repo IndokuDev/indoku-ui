@@ -136,6 +136,15 @@ test("NavigationMenu restores legacy mega-menu ContentGrid and ContentLink helpe
   expect(screen.getByRole("link", { name: "Docs Guides and API reference" }).getAttribute("href")).toBe("/docs")
 })
 
+test("AreaChart honors the legacy gradient toggle", () => {
+  const { container } = render(<Provider><AreaChart data-testid="area-gradient" series={[{ name: "A", color: "accent", values: [1, 3, 2] }]} gradient /><AreaChart data-testid="area-flat" series={[{ name: "B", color: "success", values: [2, 1, 3] }]} gradient={false} /></Provider>)
+  const [gradientChart, flatChart] = Array.from(container.querySelectorAll('svg[aria-label="Area chart"]'))
+  expect(gradientChart?.querySelector("linearGradient")).toBeTruthy()
+  expect(gradientChart?.querySelector('path[fill^="url("]')).toBeTruthy()
+  expect(flatChart?.querySelector("linearGradient")).toBeNull()
+  expect(flatChart?.querySelector('path[fill^="url("]')).toBeNull()
+})
+
 test("Menu compound API renders menu items with accessible roles", () => {
   render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
   expect(screen.getByRole("menuitem", { name: "Edit" })).toBeTruthy()
