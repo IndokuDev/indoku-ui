@@ -80,6 +80,12 @@ test("Resizable panels update sizes with accessible keyboard handles", () => {
   expect(onLayout).toHaveBeenCalledWith([55, 45])
 })
 
+test("Resizable distributes remaining space to panels without explicit sizes", () => {
+  render(<Provider><Resizable.Root><Resizable.Panel defaultSize={30}><span>Fixed panel</span></Resizable.Panel><Resizable.Handle /><Resizable.Panel><span>Flexible panel</span></Resizable.Panel></Resizable.Root></Provider>)
+  expect(screen.getByText("Fixed panel").parentElement?.getAttribute("data-size")).toBe("30")
+  expect(screen.getByText("Flexible panel").parentElement?.getAttribute("data-size")).toBe("70")
+})
+
 test("ScrollArea compound API composes viewport, content, scrollbar, and thumb", () => {
   render(<Provider><ScrollArea.Root orientation="vertical" style={{ height: 120 }}><ScrollArea.Viewport aria-label="Scrollable content"><ScrollArea.Content><div style={{ height: 400 }}>Long content</div></ScrollArea.Content></ScrollArea.Viewport><ScrollArea.Scrollbar orientation="vertical"><ScrollArea.Thumb /></ScrollArea.Scrollbar><ScrollArea.Corner /></ScrollArea.Root></Provider>)
   expect(screen.getByLabelText("Scrollable content")).toBeTruthy()

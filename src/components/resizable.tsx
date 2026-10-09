@@ -14,9 +14,12 @@ export interface PanelGroupProps extends React.HTMLAttributes<HTMLDivElement> { 
 export function PanelGroup({ direction = "horizontal", onLayout, children, ...props }: PanelGroupProps) {
   const childArray = React.Children.toArray(children)
   const panels = childArray.filter((child) => React.isValidElement(child) && (child.type as { displayName?: string }).displayName === "Panel") as React.ReactElement<PanelConfig>[]
-  const initial = panels.map((panel) => panel.props.defaultSize ?? 100 / Math.max(1, panels.length))
-  const total = initial.reduce((sum, size) => sum + size, 0) || 100
-  const [sizes, setSizes] = React.useState(() => initial.map((size) => size * 100 / total))
+  const specifiedSizes = panels.map((panel) => panel.props.defaultSize)
+  const specifiedTotal = specifiedSizes.reduce<number>((sum, size) => sum + (size ?? 0), 0)
+  const unspecifiedCount = specifiedSizes.filter((size) => size === undefined).length
+  const remainingSize = unspecifiedCount > 0 ? Math.max(0, 100 - specifiedTotal) / unspecifiedCount : 0
+  const initial = specifiedSizes.map((size) => size ?? remainingSize)
+  const [sizes, setSizes] = React.useState(() => initial)
   const groupRef = React.useRef<HTMLDivElement>(null)
   const dragRef = React.useRef<{ index: number; start: number; sizes: number[] } | null>(null)
   const limits = panels.map((panel) => ({ min: panel.props.minSize ?? 0, max: panel.props.maxSize ?? 100 }))
