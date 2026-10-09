@@ -223,7 +223,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [ ] Inventory every current component, primitive, recipe, and public export against `ui-old`.
 - [ ] Record public component API and subcomponent names from `ui-old` for each component.
 - [ ] Map each legacy Chakra wrapper to Indoku primitives/recipes and identify required Ark UI / Zag.js behavior.
-- [ ] Audit direct and transitive dependencies; ensure no Chakra runtime dependency or Chakra-specific implementation remains in the shipped package.
+- [x] Audit direct dependencies and current source for Chakra: `@chakra-ui/react`, `@chakra-ui/system`, and `@chakra-ui/icons` are absent from installed top-level dependencies; no `@chakra-ui` imports or `chakra(` calls remain under `src`. Transitive full-tree audit remains open.
 - [ ] Establish shared patterns for compound context, controllable state, IDs/ARIA, outside interaction, keyboard navigation, pointer/touch, focus management, and SSR-safe effects.
 - [ ] Establish component-level behavior and accessibility test conventions.
 
@@ -331,7 +331,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [x] Align ButtonGroup with the legacy API: attached segments by default, orientation-aware borders, focus stacking, and size propagation. Add a data-state attribute and tokenized focus outline to Toggle.
 - [ ] Rewrite Carousel against the legacy composable API and verify every requested interaction/indicator layout.
 - [ ] Add Lucide icons as the shared icon dependency where appropriate, beginning with ColorModeButton sun/moon icons.
-- [ ] Start Batch 0 full inventory and proceed sequentially through batches; keep this checklist accurate as work lands.
+- [ ] Finish Batch 0 full inventory, API/subcomponent matrix, shared behavior patterns, and conformance conventions; proceed sequentially through batches and keep this checklist accurate as work lands.
 
 - [ ] Avatar compound API adapter added (`Root`, `Image`, `Fallback`, `Group`, `GroupCount`) with image-load/error fallback state and a focused test; still needs parity review for delay behavior, group sizing/overlap, and accessibility against the legacy public API.
 - [ ] Progress compound API adapter added (`Root`, `Track`, `Range`, `Label`, `ValueText`) with ARIA bounds/state and basic rendering test; still needs complete recipe/indeterminate/formatting parity review.
