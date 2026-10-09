@@ -33,6 +33,7 @@ img,video{max-width:100%;height:auto}
 [hidden]:where(:not([hidden=until-found])){display:none!important}
 @keyframes indoku-skeleton-shimmer{to{transform:translateX(100%)}}
 @keyframes indoku-progress-indeterminate{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+@keyframes indoku-typing{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}`
 
 interface ColorModeContextValue {

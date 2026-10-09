@@ -1,9 +1,17 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Empty, Item, Kbd, KbdGroup, Label, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Marker exports separator, semantic status, row, and typing patterns", () => {
+  render(<Provider><Marker.Separator>Today</Marker.Separator><Marker.Status tone="success">Connected</Marker.Status><Marker.Row>Tool running</Marker.Row><Marker.TypingIndicator /></Provider>)
+  expect(screen.getByText("Today")).toBeTruthy()
+  expect(screen.getByText("Connected")).toBeTruthy()
+  expect(screen.getByText("Tool running")).toBeTruthy()
+  expect(screen.getByRole("status", { name: "Typing" })).toBeTruthy()
+})
 
 test("KbdGroup inserts accessible-neutral separators between keyboard keys", () => {
   render(<Provider><KbdGroup separator="+"><Kbd>Ctrl</Kbd><Kbd>K</Kbd></KbdGroup></Provider>)
