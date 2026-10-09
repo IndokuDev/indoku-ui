@@ -1,9 +1,23 @@
+import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Bubble and Message compose chat surfaces, metadata, and controlled details", () => {
+  function Harness() {
+    const [open, setOpen] = React.useState(false)
+    return <><Message.Group align="end" header={<span>Me · 12:00</span>}><Bubble.Root align="end"><Bubble.Content>Hello there</Bubble.Content><Bubble.Footer><Bubble.Action aria-label="React">+</Bubble.Action></Bubble.Footer></Bubble.Root></Message.Group><Bubble.Collapsible open={open} label="Show details" onOpenChange={setOpen}>Internal details</Bubble.Collapsible></>
+  }
+  render(<Provider><Harness /></Provider>)
+  expect(screen.getByText("Hello there")).toBeTruthy()
+  expect(screen.getByText("Me · 12:00")).toBeTruthy()
+  fireEvent.click(screen.getByRole("button", { name: "Show details" }))
+  expect(screen.getByRole("button", { name: "Show details" }).getAttribute("aria-expanded")).toBe("true")
+  expect(screen.getByText("Internal details")).toBeTruthy()
+})
 
 test("QrCode renders an accessible SVG and supports the raw matrix hook", () => {
   render(<Provider><QrCode.Root value="https://indoku.dev" label="Indoku QR"><QrCode.Frame data-testid="qr-frame" /><QrCode.Overlay><span>Logo</span></QrCode.Overlay></QrCode.Root></Provider>)
