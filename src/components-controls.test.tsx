@@ -72,7 +72,7 @@ test("RichTextEditor sanitizes unsafe HTML and exposes a composable toolbar", ()
 
 test("Resizable panels update sizes with accessible keyboard handles", () => {
   const onLayout = vi.fn()
-  render(<Provider><Resizable.PanelGroup direction="horizontal" onLayout={onLayout}><Resizable.Panel defaultSize={50} minSize={20}><span>Left panel</span></Resizable.Panel><Resizable.Handle withHandle /><Resizable.Panel defaultSize={50} minSize={20}><span>Right panel</span></Resizable.Panel></Resizable.PanelGroup></Provider>)
+  render(<Provider><Resizable.Root direction="horizontal" onLayout={onLayout}><Resizable.Panel defaultSize={50} minSize={20}><span>Left panel</span></Resizable.Panel><Resizable.Handle withHandle /><Resizable.Panel defaultSize={50} minSize={20}><span>Right panel</span></Resizable.Panel></Resizable.Root></Provider>)
   const handle = screen.getByRole("separator", { name: "Resize panels" })
   fireEvent.keyDown(handle, { key: "ArrowRight" })
   expect(screen.getByText("Left panel").parentElement?.getAttribute("data-size")).toBe("55")
@@ -106,11 +106,12 @@ test("KbdGroup inserts accessible-neutral separators between keyboard keys", () 
   expect(screen.getByText("+").getAttribute("aria-hidden")).toBe("true")
 })
 
-test("Empty compound API composes indicator, messaging, and actions", () => {
-  render(<Provider><Empty.Root><Empty.Indicator aria-hidden="true">∅</Empty.Indicator><Empty.Title>No results</Empty.Title><Empty.Description>Try another search.</Empty.Description><Empty.Content><button>Clear filters</button></Empty.Content></Empty.Root></Provider>)
+test("Empty compound API supports legacy Header/Media parts and outline variant", () => {
+  render(<Provider><Empty.Root variant="outline"><Empty.Header><Empty.Media variant="icon" aria-hidden="true">∅</Empty.Media><Empty.Title>No results</Empty.Title><Empty.Description>Try another search.</Empty.Description></Empty.Header><Empty.Content><button>Clear filters</button></Empty.Content></Empty.Root></Provider>)
   expect(screen.getByRole("heading", { name: "No results" })).toBeTruthy()
   expect(screen.getByText("Try another search.")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Clear filters" })).toBeTruthy()
+  expect(document.querySelector("section")?.getAttribute("data-variant")).not.toBe("missing")
 })
 
 test("Menubar moves focus between top-level menus with arrow keys", () => {
@@ -572,4 +573,11 @@ test("Avatar fallback honors delay and appears immediately after image failure",
   expect(screen.getByText("AD").hasAttribute("hidden")).toBe(true)
   fireEvent.error(screen.getByTestId("avatar-image"))
   await waitFor(() => expect(screen.getByText("AD").hasAttribute("hidden")).toBe(false))
+})
+
+
+test("Item interactive prop enables pointer affordance without changing its content API", () => {
+  render(<Provider><Item interactive data-testid="interactive-item" title="Settings" description="Manage preferences" /></Provider>)
+  expect(screen.getByTestId("interactive-item")).toBeTruthy()
+  expect(screen.getByText("Manage preferences")).toBeTruthy()
 })
