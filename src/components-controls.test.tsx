@@ -145,6 +145,13 @@ test("AreaChart honors the legacy gradient toggle", () => {
   expect(flatChart?.querySelector('path[fill^="url("]')).toBeNull()
 })
 
+test("LineChart applies its gradient option when area fill is enabled", () => {
+  const { container } = render(<Provider><LineChart series={[{ name: "A", values: [1, 3, 2] }]} area gradient /><LineChart series={[{ name: "B", values: [2, 1, 3] }]} area gradient={false} /></Provider>)
+  const charts = Array.from(container.querySelectorAll('svg[aria-label="Line chart"]'))
+  expect(charts[0]?.querySelector("linearGradient")).toBeTruthy()
+  expect(charts[1]?.querySelector("linearGradient")).toBeNull()
+})
+
 test("Menu compound API renders menu items with accessible roles", () => {
   render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
   expect(screen.getByRole("menuitem", { name: "Edit" })).toBeTruthy()
