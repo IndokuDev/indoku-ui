@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Field, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -48,6 +48,13 @@ test("Tooltip compound API provides a non-native accessible description", () => 
   render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
   expect(screen.getByText("Extra context")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
+})
+
+test("Date field adapters accept ISO values without exposing date-library objects", () => {
+  render(<Provider><DatePickerField label="Birthday" value={["2026-10-09"]} onValueChange={() => {}} /><DateInputField label="Appointment" defaultValue={["2026-10-10"]} /></Provider>)
+  expect(screen.getByText("Birthday")).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Open calendar" })).toBeTruthy()
+  expect(screen.getByText("Appointment")).toBeTruthy()
 })
 
 test("Calendar DayTable renders week headers and selectable date cells", () => {
