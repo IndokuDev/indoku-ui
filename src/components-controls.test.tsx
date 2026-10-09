@@ -1,9 +1,20 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Label, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Label, PasswordInput, PasswordStrengthMeter, passwordStrength, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("PasswordInput toggles visibility and exposes password strength semantics", () => {
+  const onVisibleChange = vi.fn()
+  render(<Provider><PasswordInput aria-label="Password" onVisibleChange={onVisibleChange} /><PasswordStrengthMeter value={passwordStrength("SecurePass123!")} /></Provider>)
+  const input = screen.getByLabelText("Password") as HTMLInputElement
+  expect(input.type).toBe("password")
+  fireEvent.click(screen.getByRole("button", { name: "Show password" }))
+  expect(input.type).toBe("text")
+  expect(onVisibleChange).toHaveBeenCalledWith(true)
+  expect(screen.getByRole("meter", { name: "Password strength" }).getAttribute("aria-valuenow")).toBe("4")
+})
 
 test("Label exposes disabled and required states accessibly", () => {
   render(<Provider><Label htmlFor="email" required>Email</Label><input id="email" /></Provider>)
