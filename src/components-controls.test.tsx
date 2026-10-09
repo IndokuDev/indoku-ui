@@ -1,9 +1,15 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("ScrollArea compound API composes viewport, content, scrollbar, and thumb", () => {
+  render(<Provider><ScrollArea.Root orientation="vertical" style={{ height: 120 }}><ScrollArea.Viewport aria-label="Scrollable content"><ScrollArea.Content><div style={{ height: 400 }}>Long content</div></ScrollArea.Content></ScrollArea.Viewport><ScrollArea.Scrollbar orientation="vertical"><ScrollArea.Thumb /></ScrollArea.Scrollbar><ScrollArea.Corner /></ScrollArea.Root></Provider>)
+  expect(screen.getByLabelText("Scrollable content")).toBeTruthy()
+  expect(screen.getByText("Long content")).toBeTruthy()
+})
 
 test("Direction.Root sets the DOM direction", () => {
   render(<Provider><Direction.Root dir="rtl"><span>Arabic content</span></Direction.Root></Provider>)
