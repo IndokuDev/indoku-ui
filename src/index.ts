@@ -113,6 +113,8 @@ export { ScrollArea, ScrollAreaRoot, ScrollAreaViewport, ScrollAreaContent, Scro
 export type { ScrollAreaRootProps, ScrollAreaViewportProps, ScrollAreaContentProps, ScrollAreaScrollbarProps, ScrollAreaThumbProps, ScrollAreaCornerProps } from "./components/scroll-area"
 export { Direction, DirectionRoot, useDirection, useDocumentDirection } from "./components/direction"
 export type { Direction as DirectionValue, DirectionRootProps } from "./components/direction"
+export { RichTextEditor, RichTextEditorRoot, RichTextEditorToolbar, RichTextEditorControlGroup, RichTextEditorControl, RichTextEditorContent, Bold as RichTextBold, Italic as RichTextItalic, Underline as RichTextUnderline, StrikethroughControl, H1 as RichTextH1, H2 as RichTextH2, H3 as RichTextH3, Blockquote as RichTextBlockquote, BulletList, OrderedList, AlignLeftControl, AlignCenterControl, AlignRightControl, CodeControl, LinkControl, HorizontalRule, Undo as RichTextUndo, Redo as RichTextRedo, Basic as BasicRichTextEditor, sanitizeHtml } from "./components/rich-text-editor"
+export type { RichTextEditorRootProps, RichTextEditorToolbarProps, RichTextEditorControlGroupProps, RichTextEditorControlProps, RichTextEditorContentProps } from "./components/rich-text-editor"
 export { QrCode, QrCodeRoot, QrCodeFrame, QrCodeOverlay, useQrMatrix } from "./components/qr-code"
 export type { QrCodeRootProps, QrCodeFrameProps, QrCodeOverlayProps } from "./components/qr-code"
 export { Prose } from "./components/prose"

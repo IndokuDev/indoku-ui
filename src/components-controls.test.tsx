@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -58,6 +58,16 @@ test("Questionnaire validates required choices and supports letter shortcuts", (
   fireEvent.keyDown(screen.getByRole("button", { name: "Submit" }), { key: "b" })
   fireEvent.click(screen.getByRole("button", { name: "Submit" }))
   expect(onSubmit).toHaveBeenCalledWith({ goal: { choices: ["quality"], text: "" } })
+})
+
+test("RichTextEditor sanitizes unsafe HTML and exposes a composable toolbar", () => {
+  const clean = sanitizeHtml('<p onclick="evil()">Safe <a href="javascript:alert(1)">link</a><script>alert(1)</script></p>')
+  expect(clean).not.toContain("onclick")
+  expect(clean).not.toContain("javascript:")
+  expect(clean).not.toContain("<script")
+  render(<Provider><RichTextEditor.Root defaultValue="<p>Existing note</p>"><RichTextEditor.Toolbar><RichTextEditor.ControlGroup><RichTextEditor.Bold /><RichTextEditor.Italic /></RichTextEditor.ControlGroup></RichTextEditor.Toolbar><RichTextEditor.Content placeholder="Write a note" /></RichTextEditor.Root></Provider>)
+  expect(screen.getByRole("textbox").innerHTML).toContain("Existing note")
+  expect(screen.getByRole("button", { name: "Bold" }).getAttribute("title")).toBeNull()
 })
 
 test("Resizable panels update sizes with accessible keyboard handles", () => {
