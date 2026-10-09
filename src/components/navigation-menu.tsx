@@ -16,7 +16,7 @@ const ArrowElement = indoku(ArkNavigationMenu.Arrow)
 export type NavigationMenuRootProps = React.ComponentProps<typeof ArkNavigationMenu.Root>
 export function NavigationMenuRoot(props: NavigationMenuRootProps) { return <ArkNavigationMenu.Root {...props} /> }
 export type NavigationMenuListProps = React.ComponentProps<typeof ArkNavigationMenu.List>
-export function NavigationMenuList(props: NavigationMenuListProps) { return <ListElement display="flex" alignItems="center" gap="4px" listStyle="none" m="0" p="0" {...props} /> }
+export function NavigationMenuList(props: NavigationMenuListProps) { return <ListElement display="flex" alignItems="center" gap="4px" listStyleType="none" m="0" p="0" {...props} /> }
 export type NavigationMenuItemProps = React.ComponentProps<typeof ArkNavigationMenu.Item>
 export function NavigationMenuItem(props: NavigationMenuItemProps) { return <ItemElement position="relative" {...props} /> }
 export type NavigationMenuTriggerProps = React.ComponentProps<typeof ArkNavigationMenu.Trigger>
