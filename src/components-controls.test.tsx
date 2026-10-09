@@ -557,3 +557,10 @@ test("Sidebar provider shares controlled layout state with its trigger", () => {
   fireEvent.click(screen.getByRole("button", { name: "Toggle sidebar" }))
   expect(screen.getByRole("button", { name: "Toggle sidebar" }).getAttribute("aria-expanded")).toBe("false")
 })
+
+test("Checkbox exposes the indeterminate state through native form semantics", () => {
+  render(<Provider><Checkbox indeterminate>Some selected</Checkbox></Provider>)
+  const input = document.querySelector<HTMLInputElement>('input[type="checkbox"]')!
+  expect(input.indeterminate).toBe(true)
+  expect(input.getAttribute("aria-checked")).toBe("mixed")
+})
