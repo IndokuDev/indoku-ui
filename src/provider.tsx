@@ -30,7 +30,9 @@ button,[role=button]{cursor:pointer}
 button:disabled{cursor:default}
 img,svg,video,canvas,audio,iframe,embed,object{display:block;vertical-align:middle}
 img,video{max-width:100%;height:auto}
-[hidden]:where(:not([hidden=until-found])){display:none!important}`
+[hidden]:where(:not([hidden=until-found])){display:none!important}
+@keyframes indoku-skeleton-shimmer{to{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}`
 
 interface ColorModeContextValue {
   colorMode: ColorModeValue | undefined
