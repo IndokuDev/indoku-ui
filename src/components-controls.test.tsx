@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
 
 afterEach(() => cleanup())
 
@@ -511,11 +511,12 @@ test("ModelLab builds a catalog model and updates scene parameters", () => {
 })
 
 test("Chart primitives render accessible SVGs and expose stable data helpers", () => {
-  render(<Provider><LineChart series={[{ name: "Revenue", values: [1, 3, 2], color: "accent" }]} categories={["Jan", "Feb", "Mar"]} legend /><BarChart series={[{ name: "Count", values: [2, 4] }]} categories={["A", "B"]} /><Histogram values={[1, 2, 2, 3, 4]} bins={3} /><BarSegment data={[{ name: "A", value: 2 }, { name: "B", value: 3 }]} /><ScatterChart series={[{ name: "Points", points: [{ x: 1, y: 2 }, { x: 2, y: 3 }] }]} trendLine legend /><PieChart data={[{ name: "A", value: 2 }, { name: "B", value: 3 }]} legend /><Sparkline values={[1, 2, 1, 4]} area /></Provider>)
+  render(<Provider><LineChart series={[{ name: "Revenue", values: [1, 3, 2], color: "accent" }]} categories={["Jan", "Feb", "Mar"]} legend /><BarChart series={[{ name: "Count", values: [2, 4] }]} categories={["A", "B"]} /><Histogram values={[1, 2, 2, 3, 4]} bins={3} /><BarSegment data={[{ name: "A", value: 2 }, { name: "B", value: 3 }]} /><ScatterChart series={[{ name: "Points", points: [{ x: 1, y: 2 }, { x: 2, y: 3 }] }]} trendLine legend /><RadarChart axes={["A", "B", "C"]} series={[{ name: "Radar", values: [2, 4, 3] }]} legend /><PieChart data={[{ name: "A", value: 2 }, { name: "B", value: 3 }]} legend /><Sparkline values={[1, 2, 1, 4]} area /></Provider>)
   expect(screen.getByRole("img", { name: "Line chart" })).toBeTruthy()
   expect(screen.getAllByRole("img", { name: "Bar chart" }).length).toBeGreaterThanOrEqual(2)
   expect(screen.getByRole("img", { name: "Pie chart" })).toBeTruthy()
   expect(screen.getByRole("img", { name: "Scatter chart" })).toBeTruthy()
+  expect(screen.getByRole("img", { name: "Radar chart" })).toBeTruthy()
   expect(screen.getByRole("img", { name: /A 2, B 3/ })).toBeTruthy()
   expect(screen.getByRole("img", { name: /Sparkline:/ })).toBeTruthy()
   expect(niceDomain(0, 10).domain[0]).toBe(0)
