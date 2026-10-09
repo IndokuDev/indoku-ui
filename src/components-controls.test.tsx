@@ -1,9 +1,19 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Resizable panels update sizes with accessible keyboard handles", () => {
+  const onLayout = vi.fn()
+  render(<Provider><Resizable.PanelGroup direction="horizontal" onLayout={onLayout}><Resizable.Panel defaultSize={50} minSize={20}><span>Left panel</span></Resizable.Panel><Resizable.Handle withHandle /><Resizable.Panel defaultSize={50} minSize={20}><span>Right panel</span></Resizable.Panel></Resizable.PanelGroup></Provider>)
+  const handle = screen.getByRole("separator", { name: "Resize panels" })
+  fireEvent.keyDown(handle, { key: "ArrowRight" })
+  expect(screen.getByText("Left panel").parentElement?.getAttribute("data-size")).toBe("55")
+  expect(screen.getByText("Right panel").parentElement?.getAttribute("data-size")).toBe("45")
+  expect(onLayout).toHaveBeenCalledWith([55, 45])
+})
 
 test("ScrollArea compound API composes viewport, content, scrollbar, and thumb", () => {
   render(<Provider><ScrollArea.Root orientation="vertical" style={{ height: 120 }}><ScrollArea.Viewport aria-label="Scrollable content"><ScrollArea.Content><div style={{ height: 400 }}>Long content</div></ScrollArea.Content></ScrollArea.Viewport><ScrollArea.Scrollbar orientation="vertical"><ScrollArea.Thumb /></ScrollArea.Scrollbar><ScrollArea.Corner /></ScrollArea.Root></Provider>)
