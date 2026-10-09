@@ -220,7 +220,8 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 
 ### Batch 0 — Audit and shared foundation
 
-- [ ] Inventory every current component, primitive, recipe, and public export against `ui-old`.
+- [x] Inventory every legacy component module and its public source declarations against the Indoku tree; see `COMPONENT_AUDIT.md`. This is a file/export inventory only, not a parity claim.
+- [x] Compare explicit legacy package-entry exports with `src/index.ts` and classify source-backed export omissions versus intentional API migration decisions; see the “Public package-entry audit” section in `COMPONENT_AUDIT.md`. No compatibility exports or component implementation were changed in Batch 0.
 - [ ] Record public component API and subcomponent names from `ui-old` for each component.
 - [ ] Map each legacy Chakra wrapper to Indoku primitives/recipes and identify required Ark UI / Zag.js behavior.
 - [x] Audit direct dependencies and current source for Chakra: `@chakra-ui/react`, `@chakra-ui/system`, and `@chakra-ui/icons` are absent from installed top-level dependencies; no `@chakra-ui` imports or `chakra(` calls remain under `src`. Transitive full-tree audit remains open.
