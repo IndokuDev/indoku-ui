@@ -17,6 +17,8 @@ export type {
 } from "./system"
 
 export { Provider, useColorMode, createColorModeScript, colorModeScript } from "./provider"
+export { ColorModeButton, ColorMode, LightMode, DarkMode, useColorModeValue } from "./components/color-mode"
+export type { ColorModeButtonProps, ColorModeProps } from "./components/color-mode"
 export type { ColorMode, ColorModePreference, ProviderProps } from "./provider"
 
 export { styleProps } from "./styled"

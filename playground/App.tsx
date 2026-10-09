@@ -1,6 +1,6 @@
 import { useState } from "react"
 import {
-  Accordion, AspectRatio, Avatar, Badge, Box, Button, ButtonGroup, Card, CardContent,
+  Accordion, AspectRatio, Avatar, Badge, Box, Button, ButtonGroup, Card, CardContent, ColorModeButton,
   CardDescription, CardFooter, CardHeader, CardTitle, Carousel, Checkbox, CodeBlock,
   ColorSwatch, DataList, Flex, Grid, Item, Progress, Provider, RadioGroup, Select,
   Skeleton, Stack, Stat, Status, Switch, Text, Toggle, defaultSystem, useColorMode,
@@ -9,10 +9,10 @@ import {
 const componentNames = ["Button Group", "Badge", "Card", "Avatar", "Aspect Ratio", "Item", "Skeleton", "Progress", "Status", "Stat", "Data List", "Accordion", "Carousel", "Color Swatch", "Code Block"]
 
 function ColorModeControls() {
-  const { colorMode, preference, setColorMode, toggleColorMode } = useColorMode()
+  const { colorMode, preference, setColorMode } = useColorMode()
   return <Flex alignItems="center" justifyContent="space-between" gap="3" wrap="wrap">
     <Stack gap="1"><Text fontSize="xs" fontWeight="semibold" color="fg.muted">COLOR MODE</Text><Text fontWeight="semibold">{colorMode ?? "resolving…"}<Text as="span" color="fg.muted" fontSize="sm"> · {preference}</Text></Text></Stack>
-    <Flex gap="2" alignItems="center"><Button variant="outline" onClick={toggleColorMode}>Toggle mode</Button><Box w="150px"><Select aria-label="Color mode preference" value={preference} onValueChange={(v) => setColorMode(v as "system" | "light" | "dark")} items={[{label:"System",value:"system"},{label:"Light",value:"light"},{label:"Dark",value:"dark"}]} /></Box></Flex>
+    <Flex gap="2" alignItems="center"><ColorModeButton label="Toggle color mode" /><Box w="150px"><Select aria-label="Color mode preference" value={preference} onValueChange={(v) => setColorMode(v as "system" | "light" | "dark")} items={[{label:"System",value:"system"},{label:"Light",value:"light"},{label:"Dark",value:"dark"}]} /></Box></Flex>
   </Flex>
 }
 
