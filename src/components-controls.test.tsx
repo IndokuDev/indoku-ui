@@ -137,10 +137,11 @@ test("NavigationMenu restores legacy mega-menu ContentGrid and ContentLink helpe
 })
 
 test("AreaChart honors the legacy gradient toggle", () => {
-  const { container } = render(<Provider><AreaChart data-testid="area-gradient" series={[{ name: "A", color: "accent", values: [1, 3, 2] }]} gradient /><AreaChart data-testid="area-flat" series={[{ name: "B", color: "success", values: [2, 1, 3] }]} gradient={false} /></Provider>)
+  const { container } = render(<Provider><AreaChart data-testid="area-gradient" series={[{ name: "A", color: "accent", values: [1, 3, 2] }]} gradient referenceArea={{ from: 0, to: 2, label: "Target window" }} /><AreaChart data-testid="area-flat" series={[{ name: "B", color: "success", values: [2, 1, 3] }]} gradient={false} /></Provider>)
   const [gradientChart, flatChart] = Array.from(container.querySelectorAll('svg[aria-label="Area chart"]'))
   expect(gradientChart?.querySelector("linearGradient")).toBeTruthy()
   expect(gradientChart?.querySelector('path[fill^="url("]')).toBeTruthy()
+  expect(gradientChart?.querySelector("text")?.textContent).toBe("Target window")
   expect(flatChart?.querySelector("linearGradient")).toBeNull()
   expect(flatChart?.querySelector('path[fill^="url("]')).toBeNull()
 })
