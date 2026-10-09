@@ -1,4 +1,5 @@
 import * as React from "react"
+import katexLib from "katex"
 import { indoku } from "../primitives/indoku"
 
 export interface KatexLike { renderToString: (latex: string, options?: Record<string, unknown>) => string }
@@ -9,10 +10,7 @@ export function MathRenderer({ latex, display = false, katex, ...props }: MathRe
   React.useEffect(() => {
     let cancelled = false
     void (async () => { try { let loadedKatex = katex
-      if (!loadedKatex) {
-        const optionalPackage: string = "katex"
-        loadedKatex = (await import(/* @vite-ignore */ optionalPackage)).default as unknown as KatexLike
-      }
+      if (!loadedKatex) loadedKatex = katexLib as unknown as KatexLike
       const module = loadedKatex; const result = module.renderToString(latex, { displayMode: display, throwOnError: false, output: "htmlAndMathml" }); if (!cancelled) setHtml(result) } catch { if (!cancelled) setHtml(null) } })()
     return () => { cancelled = true }
   }, [latex, display, katex])
