@@ -5,6 +5,13 @@ import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, 
 
 afterEach(() => cleanup())
 
+test("Progress exposes compound track, range, label, and value text", () => {
+  render(<Provider><Progress.Root value={40} label="Upload"><Progress.Label>Upload</Progress.Label><Progress.Track><Progress.Range data-testid="progress-range" /></Progress.Track><Progress.ValueText data-testid="progress-value" /></Progress.Root></Provider>)
+  expect(screen.getByRole("progressbar", { name: "Upload" }).getAttribute("aria-valuenow")).toBe("40")
+  expect(screen.getByTestId("progress-value").textContent).toBe("40%")
+  expect(screen.getByTestId("progress-range").getAttribute("data-state")).toBe("loading")
+})
+
 test("Avatar exposes compound slots and switches from fallback to image", () => {
   render(<Provider><Avatar.Root src="avatar.png" name="Ada Lovelace"><Avatar.Image data-testid="avatar-image" /><Avatar.Fallback>AL</Avatar.Fallback></Avatar.Root></Provider>)
   const image = screen.getByTestId("avatar-image")

@@ -332,3 +332,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [ ] Rewrite Carousel against the legacy composable API and verify every requested interaction/indicator layout.
 - [ ] Add Lucide icons as the shared icon dependency where appropriate, beginning with ColorModeButton sun/moon icons.
 - [ ] Start Batch 0 full inventory and proceed sequentially through batches; keep this checklist accurate as work lands.
+
+- [ ] Avatar compound API adapter added (`Root`, `Image`, `Fallback`, `Group`, `GroupCount`) with image-load/error fallback state and a focused test; still needs parity review for delay behavior, group sizing/overlap, and accessibility against the legacy public API.
+- [ ] Progress compound API adapter added (`Root`, `Track`, `Range`, `Label`, `ValueText`) with ARIA bounds/state and basic rendering test; still needs complete recipe/indeterminate/formatting parity review.
+- [x] Replaced raw Button/Textarea focus-ring shadows with semantic-token outlines after test failures exposed the style engine treating arbitrary shadow strings as tokens; Button light/dark CSS assertions updated.
