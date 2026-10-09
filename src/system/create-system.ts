@@ -161,7 +161,11 @@ export const createSystem = (config: SystemConfig = {}): System => {
     }
 
     const blocks: string[] = []
-    if (light.length) blocks.push(":root{" + light.join(";") + "}")
+    if (light.length) {
+      blocks.push(":root{" + light.join(";") + "}")
+      // Scope light semantic values too, so LightMode can override a dark ancestor.
+      blocks.push('[data-theme="light"]{' + light.join(";") + "}")
+    }
     if (dark.length) blocks.push('[data-theme="dark"]{' + dark.join(";") + "}")
     return blocks.join("\n")
   }

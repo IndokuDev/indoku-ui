@@ -7,8 +7,8 @@ import { ThemeProvider, useTheme } from "next-themes"
 import { SystemProvider, defaultSystem } from "./system/provider"
 import type { System } from "./system"
 
-export type ColorMode = "light" | "dark"
-export type ColorModePreference = ColorMode | "system"
+export type ColorModeValue = "light" | "dark"
+export type ColorModePreference = ColorModeValue | "system"
 
 const DEFAULT_STORAGE_KEY = "indoku-color-mode"
 const emotionCache = createCache({ key: "indoku" })
@@ -33,7 +33,7 @@ img,video{max-width:100%;height:auto}
 [hidden]:where(:not([hidden=until-found])){display:none!important}`
 
 interface ColorModeContextValue {
-  colorMode: ColorMode | undefined
+  colorMode: ColorModeValue | undefined
   preference: ColorModePreference
   setColorMode: (preference: ColorModePreference) => void
   toggleColorMode: () => void
@@ -45,7 +45,7 @@ export interface ProviderProps {
   children?: ReactNode
   value?: System
   defaultColorMode?: ColorModePreference
-  forcedColorMode?: ColorMode
+  forcedColorMode?: ColorModeValue
   storageKey?: string
 }
 
@@ -87,7 +87,7 @@ function ColorModeBridge({
   defaultColorMode: ColorModePreference
 }) {
   const { theme, resolvedTheme, setTheme } = useTheme()
-  const colorMode: ColorMode | undefined = resolvedTheme === "light" || resolvedTheme === "dark"
+  const colorMode: ColorModeValue | undefined = resolvedTheme === "light" || resolvedTheme === "dark"
     ? resolvedTheme
     : undefined
   const preference: ColorModePreference = theme === "light" || theme === "dark" || theme === "system"
