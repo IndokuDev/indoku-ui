@@ -1,9 +1,17 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Label, PasswordInput, PasswordStrengthMeter, passwordStrength, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Item, Label, PasswordInput, PasswordStrengthMeter, passwordStrength, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Dialog compound API renders accessible title and description relationships", () => {
+  render(<Provider><Dialog.Root defaultOpen><Dialog.Trigger>Open settings</Dialog.Trigger><Dialog.Backdrop /><Dialog.Positioner><Dialog.Content><Dialog.Header><Dialog.Title>Settings</Dialog.Title><Dialog.Description>Configure preferences</Dialog.Description></Dialog.Header><Dialog.Body>Dialog body</Dialog.Body><Dialog.Footer><Dialog.CloseTrigger>Close</Dialog.CloseTrigger></Dialog.Footer></Dialog.Content></Dialog.Positioner></Dialog.Root></Provider>)
+  expect(screen.getByRole("dialog")).toBeTruthy()
+  expect(screen.getByText("Configure preferences")).toBeTruthy()
+  expect(screen.getByRole("dialog").getAttribute("aria-labelledby")).toBeTruthy()
+  expect(screen.getByRole("dialog").getAttribute("aria-describedby")).toBeTruthy()
+})
 
 test("PasswordInput toggles visibility and exposes password strength semantics", () => {
   const onVisibleChange = vi.fn()
