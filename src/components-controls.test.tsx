@@ -564,3 +564,10 @@ test("Checkbox exposes the indeterminate state through native form semantics", (
   expect(input.indeterminate).toBe(true)
   expect(input.getAttribute("aria-checked")).toBe("mixed")
 })
+
+test("Avatar fallback honors delay and appears immediately after image failure", async () => {
+  render(<Provider><Avatar.Root src="/avatar.png" name="Ada"><Avatar.Image data-testid="avatar-image" /><Avatar.Fallback delayMs={1000}>AD</Avatar.Fallback></Avatar.Root></Provider>)
+  expect(screen.getByText("AD").hasAttribute("hidden")).toBe(true)
+  fireEvent.error(screen.getByTestId("avatar-image"))
+  await waitFor(() => expect(screen.getByText("AD").hasAttribute("hidden")).toBe(false))
+})

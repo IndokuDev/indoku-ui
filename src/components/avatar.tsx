@@ -40,9 +40,17 @@ export function AvatarImage({ onError, ...props }: AvatarImageProps) {
   return <ImageView {...props} src={src} alt={props.alt ?? alt ?? name ?? ""} w="100%" h="100%" objectFit="cover" onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => { setLoaded(true); props.onLoad?.(event) }} onError={(event: React.SyntheticEvent<HTMLImageElement>) => { setFailed(true); onError?.(event) }} />
 }
 export interface AvatarFallbackProps extends React.HTMLAttributes<HTMLSpanElement> { delayMs?: number }
-export function AvatarFallback({ children, ...props }: AvatarFallbackProps) {
+export function AvatarFallback({ children, delayMs = 0, ...props }: AvatarFallbackProps) {
   const { failed, loaded, src } = useAvatarContext()
-  return <FallbackView data-state={loaded && !failed ? "hidden" : "visible"} hidden={Boolean(src && loaded && !failed)} {...props}>{children}</FallbackView>
+  const [delayElapsed, setDelayElapsed] = React.useState(delayMs <= 0 || !src || failed)
+  React.useEffect(() => {
+    if (!src || failed || loaded || delayMs <= 0) { setDelayElapsed(true); return }
+    setDelayElapsed(false)
+    const timer = setTimeout(() => setDelayElapsed(true), delayMs)
+    return () => clearTimeout(timer)
+  }, [src, failed, loaded, delayMs])
+  const hidden = Boolean(src && loaded && !failed) || !delayElapsed
+  return <FallbackView data-state={hidden ? "hidden" : "visible"} hidden={hidden} {...props}>{children}</FallbackView>
 }
 export interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> { size?: AvatarSize; spacing?: string }
 export function AvatarGroup({ size = "md", spacing = "-8px", children, ...props }: AvatarGroupProps) {
