@@ -1,9 +1,16 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Empty, Item, Label, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Empty, Item, Kbd, KbdGroup, Label, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("KbdGroup inserts accessible-neutral separators between keyboard keys", () => {
+  render(<Provider><KbdGroup separator="+"><Kbd>Ctrl</Kbd><Kbd>K</Kbd></KbdGroup></Provider>)
+  expect(screen.getByText("Ctrl").tagName).toBe("KBD")
+  expect(screen.getByText("K").tagName).toBe("KBD")
+  expect(screen.getByText("+").getAttribute("aria-hidden")).toBe("true")
+})
 
 test("Empty compound API composes indicator, messaging, and actions", () => {
   render(<Provider><Empty.Root><Empty.Indicator aria-hidden="true">∅</Empty.Indicator><Empty.Title>No results</Empty.Title><Empty.Description>Try another search.</Empty.Description><Empty.Content><button>Clear filters</button></Empty.Content></Empty.Root></Provider>)
