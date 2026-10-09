@@ -1,0 +1,8 @@
+import * as React from "react"
+import { indoku } from "../primitives/indoku"
+const Root = indoku("dl"), ItemRoot = indoku("div"), Label = indoku("dt"), Value = indoku("dd")
+export interface DataListItem { label: React.ReactNode; value: React.ReactNode; description?: React.ReactNode }
+export interface DataListProps extends React.HTMLAttributes<HTMLDListElement> { items?: DataListItem[]; orientation?: "horizontal" | "vertical"; size?: "sm" | "md" | "lg"; }
+export function DataList({ items, orientation = "horizontal", size = "md", children, ...props }: DataListProps) { const gap = size === "sm" ? "8px" : size === "lg" ? "20px" : "12px"; return <Root display="flex" flexDirection="column" gap={gap} {...props}>{items ? items.map((item, i) => <DataListItemView key={i} label={item.label} description={item.description} orientation={orientation}>{item.value}</DataListItemView>) : children}</Root> }
+export interface DataListItemProps extends React.HTMLAttributes<HTMLDivElement> { label: React.ReactNode; description?: React.ReactNode; orientation?: "horizontal" | "vertical" }
+export function DataListItemView({ label, description, orientation = "horizontal", children, ...props }: DataListItemProps) { return <ItemRoot display="flex" flexDirection={orientation === "horizontal" ? "row" : "column"} alignItems={orientation === "horizontal" ? "baseline" : "stretch"} justifyContent="space-between" gap="12px" {...props}><div><Label fontSize="14px" color="fg.muted">{label}</Label>{description !== undefined && <div style={{ fontSize: 12, color: "var(--indoku-colors-fg-muted)" }}>{description}</div>}</div><Value fontSize="14px" fontWeight="medium" margin="0">{children}</Value></ItemRoot> }
