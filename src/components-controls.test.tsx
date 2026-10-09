@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, NavigationMenu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -46,6 +46,12 @@ test("Empty compound API composes indicator, messaging, and actions", () => {
   expect(screen.getByRole("heading", { name: "No results" })).toBeTruthy()
   expect(screen.getByText("Try another search.")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Clear filters" })).toBeTruthy()
+})
+
+test("NavigationMenu compound API exposes navigable triggers and links", () => {
+  render(<Provider><NavigationMenu.Root defaultValue="products"><NavigationMenu.List><NavigationMenu.Item value="products"><NavigationMenu.Trigger>Products</NavigationMenu.Trigger><NavigationMenu.Content><NavigationMenu.Link href="/docs">Documentation</NavigationMenu.Link></NavigationMenu.Content></NavigationMenu.Item></NavigationMenu.List><NavigationMenu.ViewportPositioner><NavigationMenu.Viewport /></NavigationMenu.ViewportPositioner></NavigationMenu.Root></Provider>)
+  expect(screen.getByRole("button", { name: "Products" })).toBeTruthy()
+  expect(screen.getByRole("link", { name: "Documentation" })).toBeTruthy()
 })
 
 test("Menu compound API renders menu items with accessible roles", () => {
