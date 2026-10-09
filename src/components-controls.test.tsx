@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable } from "./index"
 
 afterEach(() => cleanup())
 
@@ -484,4 +484,17 @@ test("Plot3D exposes an accessible canvas and camera controls", () => {
   expect(screen.getByRole("button", { name: "Zoom in" })).toBeTruthy()
   fireEvent.click(screen.getByRole("button", { name: "Reset view" }))
   getContext.mockRestore()
+})
+
+test("PeriodicTable selects elements and announces the selected element details", () => {
+  const onSelect = vi.fn()
+  const elements = [
+    { number: 1, symbol: "H", name: "Hydrogen", mass: 1.008, period: 1, group: 1, category: "nonmetal" },
+    { number: 2, symbol: "He", name: "Helium", mass: 4.0026, period: 1, group: 18, category: "noble-gas" },
+  ]
+  render(<Provider><PeriodicTable elements={elements} onSelect={onSelect} /></Provider>)
+  fireEvent.click(screen.getByRole("button", { name: "Helium, atomic number 2" }))
+  expect(onSelect).toHaveBeenCalledWith(elements[1])
+  expect(screen.getByText("Helium")).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Helium, atomic number 2" }).getAttribute("aria-pressed")).toBe("true")
 })
