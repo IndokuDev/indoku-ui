@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -89,6 +89,12 @@ test("Flash renders inline status messaging without a floating toast region", ()
   expect(screen.getByRole("status").textContent).toContain("Profile saved")
   expect(screen.getByRole("alert").textContent).toContain("Could not save")
   expect(screen.queryByRole("region", { name: /Notifications/ })).toBeNull()
+})
+
+test("Time formats valid dates and preserves semantic datetime", () => {
+  render(<Provider><Time value="2026-10-09T12:00:00.000Z" options={{ dateStyle: "short", timeZone: "UTC" }}>Today</Time><Time value="invalid-date" data-testid="invalid-time" /></Provider>)
+  expect(screen.getByText("Today").closest("time")?.getAttribute("datetime")).toBe("2026-10-09T12:00:00.000Z")
+  expect(screen.getByTestId("invalid-time").getAttribute("datetime")).toBeNull()
 })
 
 test("Toast API renders semantic notifications and supports dismissal", async () => {
