@@ -1,9 +1,14 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Direction.Root sets the DOM direction", () => {
+  render(<Provider><Direction.Root dir="rtl"><span>Arabic content</span></Direction.Root></Provider>)
+  expect(screen.getByText("Arabic content").parentElement?.getAttribute("dir")).toBe("rtl")
+})
 
 test("Marker exports separator, semantic status, row, and typing patterns", () => {
   render(<Provider><Marker.Separator>Today</Marker.Separator><Marker.Status tone="success">Connected</Marker.Status><Marker.Row>Tool running</Marker.Row><Marker.TypingIndicator /></Provider>)
