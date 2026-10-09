@@ -1,9 +1,16 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Item, Label, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Empty, Item, Label, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Empty compound API composes indicator, messaging, and actions", () => {
+  render(<Provider><Empty.Root><Empty.Indicator aria-hidden="true">∅</Empty.Indicator><Empty.Title>No results</Empty.Title><Empty.Description>Try another search.</Empty.Description><Empty.Content><button>Clear filters</button></Empty.Content></Empty.Root></Provider>)
+  expect(screen.getByRole("heading", { name: "No results" })).toBeTruthy()
+  expect(screen.getByText("Try another search.")).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Clear filters" })).toBeTruthy()
+})
 
 test("Menu compound API renders menu items with accessible roles", () => {
   render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
