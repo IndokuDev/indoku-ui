@@ -1,9 +1,19 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, Questionnaire, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Questionnaire validates required choices and supports letter shortcuts", () => {
+  const onSubmit = vi.fn()
+  render(<Provider><Questionnaire.Root items={[{ name: "goal", prompt: "Primary goal?", required: true, choices: [{ value: "speed", label: "Speed" }, { value: "quality", label: "Quality" }] }]} onSubmit={onSubmit} /></Provider>)
+  fireEvent.click(screen.getByRole("button", { name: "Submit" }))
+  expect(screen.getByRole("alert").textContent).toContain("Choose an answer")
+  fireEvent.keyDown(screen.getByRole("button", { name: "Submit" }), { key: "b" })
+  fireEvent.click(screen.getByRole("button", { name: "Submit" }))
+  expect(onSubmit).toHaveBeenCalledWith({ goal: { choices: ["quality"], text: "" } })
+})
 
 test("Resizable panels update sizes with accessible keyboard handles", () => {
   const onLayout = vi.fn()
