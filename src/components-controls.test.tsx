@@ -5,6 +5,14 @@ import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, 
 
 afterEach(() => cleanup())
 
+test("Badge status variants use semantic status tokens", () => {
+  render(<Provider><Badge variant="success">Saved</Badge><Badge variant="warning">Pending</Badge><Badge variant="destructive">Failed</Badge></Provider>)
+  const css = Array.from(document.querySelectorAll('style[data-emotion^="indoku"]')).map((node) => node.textContent ?? "").join("\n")
+  expect(css).toContain("var(--indoku-colors-status-success)")
+  expect(css).toContain("var(--indoku-colors-status-warning)")
+  expect(css).toContain("var(--indoku-colors-status-danger)")
+})
+
 test("ToggleGroup roves focus with orientation-aware arrow keys", () => {
   render(<Provider><ToggleGroup.Root orientation="horizontal"><ToggleGroup.Item value="left">Left</ToggleGroup.Item><ToggleGroup.Item value="right">Right</ToggleGroup.Item><ToggleGroup.Item value="third" disabled>Disabled</ToggleGroup.Item></ToggleGroup.Root></Provider>)
   const left = screen.getByRole("button", { name: "Left" })
