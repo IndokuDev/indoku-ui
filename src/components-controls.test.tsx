@@ -245,6 +245,13 @@ test("Label exposes disabled and required states accessibly", () => {
   expect(screen.getByText("*").getAttribute("aria-hidden")).toBe("true")
 })
 
+test("ColorSwatch compound API shares color values with its label and swatch", () => {
+  render(<Provider><ColorSwatch.Root value="#ff0000" checkerboard><ColorSwatch.Swatch /><ColorSwatch.Label>Brand red</ColorSwatch.Label><ColorSwatch.ValueText /></ColorSwatch.Root></Provider>)
+  expect(screen.getByRole("img", { name: "Color #ff0000" })).toBeTruthy()
+  expect(screen.getByText("Brand red")).toBeTruthy()
+  expect(screen.getByText("#ff0000")).toBeTruthy()
+})
+
 test("Badge status variants use semantic status tokens", () => {
   render(<Provider><Badge variant="success">Saved</Badge><Badge variant="warning">Pending</Badge><Badge variant="destructive">Failed</Badge></Provider>)
   const css = Array.from(document.querySelectorAll('style[data-emotion^="indoku"]')).map((node) => node.textContent ?? "").join("\n")
