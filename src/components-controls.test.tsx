@@ -1,9 +1,15 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Label, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Label exposes disabled and required states accessibly", () => {
+  render(<Provider><Label htmlFor="email" required>Email</Label><input id="email" /></Provider>)
+  expect(document.querySelector('label[for="email"]')).toBeTruthy()
+  expect(screen.getByText("*").getAttribute("aria-hidden")).toBe("true")
+})
 
 test("Badge status variants use semantic status tokens", () => {
   render(<Provider><Badge variant="success">Saved</Badge><Badge variant="warning">Pending</Badge><Badge variant="destructive">Failed</Badge></Provider>)
