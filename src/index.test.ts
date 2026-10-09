@@ -13,3 +13,10 @@ test("exports legacy utility helpers from the package entry", () => {
   expect(qr.size).toBeGreaterThan(0)
   expect(qr.modules).toHaveLength(qr.size)
 })
+
+test("keeps legacy form and questionnaire type aliases in the public entry", async () => {
+  // Runtime import guards the public entry while typecheck validates the aliases.
+  const entry = await import("./index")
+  expect(entry.Form).toBeDefined()
+  expect(entry.Questionnaire).toBeDefined()
+})
