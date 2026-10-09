@@ -59,6 +59,11 @@ export const defaultTheme: NonNullable<SystemConfig["theme"]> = {
       "primary.foreground": { value: { base: "{colors.gray.50}", _dark: "{colors.gray.900}" } },
       "accent.default": { value: { base: "{colors.gray.900}", _dark: "{colors.gray.100}" } },
       "accent.hover": { value: { base: "{colors.gray.800}", _dark: "{colors.gray.200}" } },
+      "status.success": { value: { base: "{colors.green.600}", _dark: "{colors.green.500}" } },
+      "status.danger": { value: { base: "{colors.red.600}", _dark: "{colors.red.500}" } },
+      "status.warning": { value: { base: "#a16207", _dark: "#facc15" } },
+      "status.info": { value: { base: "#2563eb", _dark: "#60a5fa" } },
+      "status.neutral": { value: { base: "{colors.gray.500}", _dark: "{colors.gray.400}" } },
     },
   },
 }

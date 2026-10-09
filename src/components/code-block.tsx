@@ -15,12 +15,12 @@ const ExpandTrigger = indoku("button")
 const tokenColor: Record<TokenType, string | undefined> = {
   comment: "fg.muted",
   string: "status.success",
-  number: "accent.default",
+  number: "status.warning",
   keyword: "accent.default",
   fn: "accent.default",
   type: "status.info",
   tag: "status.danger",
-  attr: "accent.default",
+  attr: "status.warning",
   plain: undefined,
 }
 
