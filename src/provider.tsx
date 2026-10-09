@@ -2,7 +2,8 @@
 
 import { CacheProvider } from "@emotion/react"
 import createCache from "@emotion/cache"
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react"
+import { createContext, useCallback, useContext, useLayoutEffect, useMemo, type ReactNode } from "react"
+import { ThemeProvider, useTheme } from "next-themes"
 import { SystemProvider, defaultSystem } from "./system/provider"
 import type { System } from "./system"
 
@@ -40,23 +41,6 @@ interface ColorModeContextValue {
 
 const ColorModeContext = createContext<ColorModeContextValue | null>(null)
 
-function readStored(key: string): ColorModePreference | null {
-  try {
-    const value = window.localStorage.getItem(key)
-    return value === "light" || value === "dark" || value === "system" ? value : null
-  } catch {
-    return null
-  }
-}
-
-function applyMode(mode: ColorMode) {
-  const element = document.documentElement
-  element.classList.remove("light", "dark")
-  element.classList.add(mode)
-  element.dataset.theme = mode
-  element.style.colorScheme = mode
-}
-
 export interface ProviderProps {
   children?: ReactNode
   value?: System
@@ -72,45 +56,70 @@ export function Provider({
   forcedColorMode,
   storageKey = DEFAULT_STORAGE_KEY,
 }: ProviderProps) {
-  // Read the saved preference before the first client render. Loading it in an
-  // effect lets the system preference apply for one frame before the saved mode.
-  const [preference, setPreference] = useState<ColorModePreference>(() => {
-    if (typeof window === "undefined") return defaultColorMode
-    return readStored(storageKey) ?? defaultColorMode
-  })
-  const [colorMode, setResolved] = useState<ColorMode | undefined>(forcedColorMode)
+  return (
+    <CacheProvider value={emotionCache}>
+      <SystemProvider value={value}>
+        <ThemeProvider
+          attribute={["class", "data-theme"]}
+          defaultTheme={defaultColorMode}
+          forcedTheme={forcedColorMode}
+          storageKey={storageKey}
+          enableSystem
+          enableColorScheme
+          disableTransitionOnChange
+        >
+          <ColorModeBridge defaultColorMode={defaultColorMode}>
+            <style data-indoku-reset="">{resetStyles}</style>
+            <style data-indoku-theme="">{value.cssVariables()}</style>
+            {children}
+          </ColorModeBridge>
+        </ThemeProvider>
+      </SystemProvider>
+    </CacheProvider>
+  )
+}
 
-  useEffect(() => {
-    if (forcedColorMode) {
-      setResolved(forcedColorMode)
-      applyMode(forcedColorMode)
-      return
-    }
+function ColorModeBridge({
+  children,
+  defaultColorMode,
+}: {
+  children: ReactNode
+  defaultColorMode: ColorModePreference
+}) {
+  const { theme, resolvedTheme, setTheme } = useTheme()
+  const colorMode: ColorMode | undefined = resolvedTheme === "light" || resolvedTheme === "dark"
+    ? resolvedTheme
+    : undefined
+  const preference: ColorModePreference = theme === "light" || theme === "dark" || theme === "system"
+    ? theme
+    : defaultColorMode
 
-    const query = typeof window.matchMedia === "function"
-      ? window.matchMedia("(prefers-color-scheme: dark)")
-      : null
-
-    const update = () => {
-      const mode: ColorMode = preference === "system" ? (query?.matches ? "dark" : "light") : preference
-      setResolved(mode)
-      applyMode(mode)
-    }
-
-    update()
-    if (preference !== "system" || !query) return
-    query.addEventListener("change", update)
-    return () => query.removeEventListener("change", update)
-  }, [preference, forcedColorMode])
+  // next-themes' inline script is effective in server-rendered HTML, but a
+  // script element rendered by React during a client-only mount does not run
+  // early enough to prevent a light frame. Sync the already-resolved theme in
+  // a layout effect so the DOM is corrected before the browser paints it.
+  useLayoutEffect(() => {
+    if (!colorMode) return
+    const root = document.documentElement
+    root.classList.remove("light", "dark")
+    root.classList.add(colorMode)
+    root.dataset.theme = colorMode
+    root.style.colorScheme = colorMode
+  }, [colorMode])
 
   const setColorMode = useCallback((next: ColorModePreference) => {
-    setPreference(next)
-    try {
-      window.localStorage.setItem(storageKey, next)
-    } catch {
-      return
-    }
-  }, [storageKey])
+    // Apply the resolved mode before React's passive effects run. This avoids
+    // a visible light-frame when changing from light to dark (or system-dark).
+    const nextMode = next === "system"
+      ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+      : next
+    const root = document.documentElement
+    root.classList.remove("light", "dark")
+    root.classList.add(nextMode)
+    root.dataset.theme = nextMode
+    root.style.colorScheme = nextMode
+    setTheme(next)
+  }, [setTheme])
 
   const toggleColorMode = useCallback(() => {
     setColorMode(colorMode === "dark" ? "light" : "dark")
@@ -121,17 +130,7 @@ export function Provider({
     [colorMode, preference, setColorMode, toggleColorMode],
   )
 
-  return (
-    <CacheProvider value={emotionCache}>
-      <SystemProvider value={value}>
-        <ColorModeContext.Provider value={contextValue}>
-          <style data-indoku-reset="">{resetStyles}</style>
-          <style data-indoku-theme="">{value.cssVariables()}</style>
-          {children}
-        </ColorModeContext.Provider>
-      </SystemProvider>
-    </CacheProvider>
-  )
+  return <ColorModeContext.Provider value={contextValue}>{children}</ColorModeContext.Provider>
 }
 
 export function useColorMode() {
