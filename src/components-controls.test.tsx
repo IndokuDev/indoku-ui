@@ -1,9 +1,15 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Item, Label, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Item, Label, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Tooltip compound API provides a non-native accessible description", () => {
+  render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
+  expect(screen.getByText("Extra context")).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
+})
 
 test("Popover compound API renders anchored content with a close trigger", () => {
   render(<Provider><Popover.Root defaultOpen><Popover.Trigger>More info</Popover.Trigger><Popover.Positioner><Popover.Content><Popover.Arrow /><span>Helpful details</span><Popover.CloseTrigger>Close</Popover.CloseTrigger></Popover.Content></Popover.Positioner></Popover.Root></Provider>)
