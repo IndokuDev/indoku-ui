@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -48,6 +48,14 @@ test("Tooltip compound API provides a non-native accessible description", () => 
   render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
   expect(screen.getByText("Extra context")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
+})
+
+test("Pagination compound API renders page navigation and current page state", () => {
+  render(<Provider><Pagination.Root count={100} pageSize={10} defaultPage={2}><Pagination.Content><Pagination.Previous /><Pagination.Pages /><Pagination.Next /></Pagination.Content><Pagination.PageText data-testid="page-text" /></Pagination.Root></Provider>)
+  expect(screen.getByRole("button", { name: "Previous page" })).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Next page" })).toBeTruthy()
+  expect(screen.getByRole("button", { name: "page 2" }).getAttribute("aria-current")).toBe("page")
+  expect(screen.getByTestId("page-text").textContent).toContain("Page 2 of 10")
 })
 
 test("Popover compound API renders anchored content with a close trigger", () => {
