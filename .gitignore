@@ -1,4 +1,13 @@
+# Dependencies and generated build/test output (local only)
 /node_modules/
 /dist/
 /coverage/
-/playground/dist/
+
+# Local development playground — never commit or push
+/playground/
+
+# Internal working notes — local only, not part of the public repository
+/INSTRUCTIONS.md
+/TODO.md
+/PROGRESS.md
+/COMPONENT_AUDIT.md
