@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, NavigationMenu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, NavigationMenu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -46,6 +46,15 @@ test("Empty compound API composes indicator, messaging, and actions", () => {
   expect(screen.getByRole("heading", { name: "No results" })).toBeTruthy()
   expect(screen.getByText("Try another search.")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Clear filters" })).toBeTruthy()
+})
+
+test("Menubar moves focus between top-level menus with arrow keys", () => {
+  render(<Provider><Menubar.Root><Menubar.MenuItem label="File"><Menubar.Item value="new">New</Menubar.Item></Menubar.MenuItem><Menubar.MenuItem label="Edit"><Menubar.Item value="copy">Copy</Menubar.Item></Menubar.MenuItem></Menubar.Root></Provider>)
+  const file = screen.getByRole("menuitem", { name: "File" })
+  const edit = screen.getByRole("menuitem", { name: "Edit" })
+  file.focus()
+  fireEvent.keyDown(file, { key: "ArrowRight" })
+  expect(document.activeElement).toBe(edit)
 })
 
 test("NavigationMenu compound API exposes navigable triggers and links", () => {
