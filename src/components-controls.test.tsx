@@ -163,12 +163,15 @@ test("LineChart supports a separate right-axis scale and formatter", () => {
 })
 
 test("Cartesian charts forward SVG attributes and event handlers", () => {
-  const onClick = vi.fn()
-  const { container } = render(<Provider><LineChart data-testid="custom-line-chart" onClick={onClick} className="consumer-chart" series={[{ name: "A", values: [1, 2] }]} /></Provider>)
-  const svg = container.querySelector('svg[data-testid="custom-line-chart"]')!
-  expect(svg.classList.contains("consumer-chart")).toBe(true)
-  fireEvent.click(svg)
-  expect(onClick).toHaveBeenCalledTimes(1)
+  const onLineClick = vi.fn(), onScatterClick = vi.fn()
+  const { container } = render(<Provider><LineChart data-testid="custom-line-chart" onClick={onLineClick} className="consumer-chart" series={[{ name: "A", values: [1, 2] }]} /><ScatterChart data-testid="custom-scatter-chart" onClick={onScatterClick} className="consumer-scatter" series={[{ name: "Points", points: [{ x: 1, y: 2 }, { x: 2, y: 3 }] }]} /></Provider>)
+  const line = container.querySelector('svg[data-testid="custom-line-chart"]')!, scatter = container.querySelector('svg[data-testid="custom-scatter-chart"]')!
+  expect(line.classList.contains("consumer-chart")).toBe(true)
+  expect(scatter.classList.contains("consumer-scatter")).toBe(true)
+  fireEvent.click(line)
+  fireEvent.click(scatter)
+  expect(onLineClick).toHaveBeenCalledTimes(1)
+  expect(onScatterClick).toHaveBeenCalledTimes(1)
 })
 
 test("Menu compound API renders menu items with accessible roles", () => {
