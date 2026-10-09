@@ -154,6 +154,13 @@ test("LineChart applies its gradient option when area fill is enabled", () => {
   expect(charts[1]?.querySelector("linearGradient")).toBeNull()
 })
 
+test("LineChart supports a separate right-axis scale and formatter", () => {
+  const { container } = render(<Provider><LineChart series={[{ name: "Left", values: [1, 3] }, { name: "Right", axis: "right", values: [100, 200] }]} rightTickFormat={(value) => `R${value}`} referenceLines={[{ value: 150, axis: "right", label: "Right target" }]} /></Provider>)
+  const chart = container.querySelector('svg[aria-label="Line chart"]')!
+  expect(Array.from(chart.querySelectorAll("text")).some((node) => node.textContent?.startsWith("R"))).toBe(true)
+  expect(Array.from(chart.querySelectorAll("text")).some((node) => node.textContent === "Right target")).toBe(true)
+})
+
 test("Menu compound API renders menu items with accessible roles", () => {
   render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
   expect(screen.getByRole("menuitem", { name: "Edit" })).toBeTruthy()
