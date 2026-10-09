@@ -94,6 +94,14 @@ test("display components render accessible content and basic states", () => {
   expect(screen.getByText("const x = 1")).toBeTruthy()
 })
 
+test("CodeBlock supports line numbers, highlighted lines, and collapsible content", () => {
+  render(<Provider><CodeBlock code={"const a = 1\nconst b = 2\nconst c = 3"} language="ts" showLineNumbers highlightLines={[2]} maxLines={1} /></Provider>)
+  expect(screen.getByRole("button", { name: "Show all 3 lines" })).toBeTruthy()
+  expect(document.querySelector('[data-line="2"][data-state="highlighted"]')).toBeTruthy()
+  fireEvent.click(screen.getByRole("button", { name: "Show all 3 lines" }))
+  expect(screen.getByRole("button", { name: "Show less" })).toBeTruthy()
+})
+
 test("Accordion supports opening an item", () => {
   render(<Provider><Accordion items={[{ value: "faq", title: "Question", content: "Answer" }]} /></Provider>)
   fireEvent.click(screen.getByRole("button", { name: /Question/ }))

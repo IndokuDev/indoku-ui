@@ -242,7 +242,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [ ] Stat — Root, Label, ValueText, HelpText, Change/Indicator; trend and value composition.
 - [ ] DataList — Root, Item, ItemLabel, ItemValue; horizontal/vertical layouts and responsive composition.
 - [ ] ColorSwatch — Root, Trigger/Swatch, ValueText/Label; accessible color display and optional checkerboard.
-- [ ] CodeBlock — Root, Header, Title, Content/Code, CopyTrigger, Language; copy feedback and long-code overflow.
+- [x] CodeBlock — legacy Root API and props ported to Indoku primitives: lightweight syntax highlighting, line numbers, highlighted/added/removed lines, wrapping, copy feedback, and collapsible long code. Tested line-state and expansion behavior; clipboard permission/failure paths still need browser-level verification.
 - [ ] Toggle — Root and controlled/uncontrolled pressed state, keyboard and ARIA.
 - [ ] ToggleGroup — Root, Item; single/multiple selection, orientation, roving focus. (Initial compound API and basic controlled/uncontrolled tests added; roving focus and legacy parity remain.)
 
@@ -327,6 +327,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [ ] Audit those adapters against the actual `ui-old` API; current additions are a starting point, not proof of 1:1 parity.
 - [x] Add ToggleGroup compound API (`Root`/`Item`) using Indoku primitives and shared context; add initial single/multiple/disabled behavior tests.
 - [x] Add `Item.Actions` compound slot matching the legacy Item API.
+- [x] Port `ui-old` lightweight syntax tokenizer and restore the legacy CodeBlock feature set without Chakra runtime; add conformance coverage for line numbers, highlighted lines, and expand/collapse.
 - [ ] Rewrite Carousel against the legacy composable API and verify every requested interaction/indicator layout.
 - [ ] Add Lucide icons as the shared icon dependency where appropriate, beginning with ColorModeButton sun/moon icons.
 - [ ] Start Batch 0 full inventory and proceed sequentially through batches; keep this checklist accurate as work lands.
