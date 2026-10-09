@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Direction, Empty, Field, Form, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -48,6 +48,22 @@ test("Tooltip compound API provides a non-native accessible description", () => 
   render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
   expect(screen.getByText("Extra context")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
+})
+
+test("useForm validates, tracks fields, submits, and resets", async () => {
+  const onSubmit = vi.fn()
+  function Harness() {
+    const form = useForm({ defaultValues: { email: "" }, validators: { email: (value) => value.includes("@") ? undefined : "Invalid email" }, onSubmit })
+    return <Form onSubmit={form.handleSubmit}><Field meta={form.getFieldMeta("email")} label="Email" required><input {...form.getInputProps("email")} /></Field><button type="submit">Save</button><button type="button" onClick={() => form.reset()}>Reset</button></Form>
+  }
+  render(<Provider><Harness /></Provider>)
+  fireEvent.click(screen.getByRole("button", { name: "Save" }))
+  expect(screen.getByRole("alert").textContent).toBe("Invalid email")
+  fireEvent.change(screen.getByRole("textbox"), { target: { value: "a@example.com" } })
+  fireEvent.click(screen.getByRole("button", { name: "Save" }))
+  expect(onSubmit).toHaveBeenCalledWith({ email: "a@example.com" })
+  fireEvent.click(screen.getByRole("button", { name: "Reset" }))
+  expect((screen.getByRole("textbox") as HTMLInputElement).value).toBe("")
 })
 
 test("Pagination compound API renders page navigation and current page state", () => {
