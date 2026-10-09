@@ -15,12 +15,12 @@ const ExpandTrigger = indoku("button")
 const tokenColor: Record<TokenType, string | undefined> = {
   comment: "fg.muted",
   string: "status.success",
-  number: "status.warning",
+  number: "accent.default",
   keyword: "accent.default",
   fn: "accent.default",
   type: "status.info",
   tag: "status.danger",
-  attr: "status.warning",
+  attr: "accent.default",
   plain: undefined,
 }
 
@@ -82,7 +82,7 @@ function CodeBlockRoot({
         <Header display="flex" alignItems="center" justifyContent="space-between" gap="8px" px="12px" h="36px" borderBottom="1px solid" borderColor="border.subtle" fontSize="12px" color="fg.muted">
           <TitleElement fontWeight="medium" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{title ?? language}</TitleElement>
           {copyable && (
-            <CopyTrigger type="button" onClick={copy} aria-label={copied ? "Copied" : "Copy code"} display="inline-flex" alignItems="center" justifyContent="center" w="24px" h="24px" flexShrink="0" ml="auto" border="0" borderRadius="sm" bg="transparent" color="fg.muted" cursor="pointer" _hover={{ bg: "bg.muted", color: "fg.default" }} _focusVisible={{ outline: "2px solid", outlineColor: "accent.default", outlineOffset: "2px" }}>
+            <CopyTrigger type="button" onClick={copy} aria-label={copied ? "Copied" : "Copy code"} display="inline-flex" alignItems="center" justifyContent="center" w="24px" h="24px" flexShrink="0" ml="auto" border="0" borderRadius="sm" bg="transparent" color="fg.muted" cursor="pointer" _hover={{ bg: "bg.subtle", color: "fg.default" }} _focusVisible={{ outline: "2px solid", outlineColor: "accent.default", outlineOffset: "2px" }}>
               {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
             </CopyTrigger>
           )}
@@ -104,7 +104,7 @@ function CodeBlockRoot({
         </code>
       </Pre>
       {collapsible && (
-        <ExpandTrigger type="button" onClick={() => setExpanded(value => !value)} w="100%" h="32px" borderTop="1px solid" borderColor="border.subtle" bg="transparent" color="fg.muted" fontSize="12px" cursor="pointer" _hover={{ bg: "bg.muted", color: "fg.default" }}>
+        <ExpandTrigger type="button" onClick={() => setExpanded(value => !value)} w="100%" h="32px" borderTop="1px solid" borderColor="border.subtle" bg="transparent" color="fg.muted" fontSize="12px" cursor="pointer" _hover={{ bg: "bg.subtle", color: "fg.default" }}>
           {expanded ? "Show less" : `Show all ${lines.length} lines`}
         </ExpandTrigger>
       )}
