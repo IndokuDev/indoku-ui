@@ -8,6 +8,11 @@ export interface CarouselProps {
   spacing?: string
   loop?: boolean
   autoplay?: boolean
+  page?: number
+  defaultPage?: number
+  onPageChange?: (details: { page: number }) => void
+  orientation?: "horizontal" | "vertical"
+  allowMouseDrag?: boolean
   className?: string
   label?: string
 }
@@ -25,9 +30,9 @@ const AutoplayTrigger = indoku(ArkCarousel.AutoplayTrigger)
 const AutoplayIndicator = indoku(ArkCarousel.AutoplayIndicator)
 const ProgressText = indoku(ArkCarousel.ProgressText)
 
-function CarouselComponent({ items, slidesPerPage = 1, spacing = "12px", loop = false, autoplay = false, className, label = "Carousel" }: CarouselProps) {
+function CarouselComponent({ items, slidesPerPage = 1, spacing = "12px", loop = false, autoplay = false, page, defaultPage, onPageChange, orientation = "horizontal", allowMouseDrag = false, className, label = "Carousel" }: CarouselProps) {
   return (
-    <Root className={className} slideCount={items.length} slidesPerPage={slidesPerPage} spacing={spacing} loop={loop} autoplay={autoplay ? { delay: 4000 } : undefined} aria-label={label} style={{ width: "100%" }}>
+    <Root className={className} slideCount={items.length} page={page} defaultPage={defaultPage} onPageChange={onPageChange} slidesPerPage={slidesPerPage} spacing={spacing} loop={loop} orientation={orientation} allowMouseDrag={allowMouseDrag} autoplay={autoplay ? { delay: 4000 } : undefined} aria-label={label} style={{ width: "100%" }}>
       <ItemGroup style={{ display: "flex", gap: spacing, overflow: "hidden" }}>
         {items.map((content, index) => <Item key={index} index={index} style={{ minWidth: 0 }}>{content}</Item>)}
       </ItemGroup>
