@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, RangeBarChart, CandlestickChart, Command, commandScore, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, RangeBarChart, CandlestickChart, Command, commandScore, DataTable, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
 
 afterEach(() => cleanup())
 
@@ -535,4 +535,17 @@ test("Command filters by text and keywords and supports keyboard selection", asy
   fireEvent.keyDown(input, { key: "Enter" })
   expect(onSelect).toHaveBeenCalledWith("Open file")
   expect(commandScore("Open file", "open")).toBeGreaterThan(0)
+})
+
+test("DataTable composes search, sortable columns, row selection, and pagination", async () => {
+  const onSelectionChange = vi.fn()
+  const data = [{ id: "a", name: "Ada", score: 3 }, { id: "b", name: "Bo", score: 1 }, { id: "c", name: "Cy", score: 2 }]
+  const columns = [{ id: "name", header: "Name", accessor: "name" as const, sortable: true }, { id: "score", header: "Score", accessor: "score" as const, sortable: true }]
+  render(<Provider><DataTable.Root data={data} columns={columns} pageSize={2} selectable getRowId={(row) => row.id} onSelectionChange={onSelectionChange}><DataTable.Toolbar><DataTable.Search /><DataTable.ColumnToggle /></DataTable.Toolbar><DataTable.Table /><DataTable.Pagination /></DataTable.Root></Provider>)
+  expect(screen.getByText("Ada")).toBeTruthy()
+  fireEvent.click(screen.getByRole("button", { name: /Score/ }))
+  await waitFor(() => expect(screen.getAllByRole("row")[1]?.textContent).toContain("Bo"))
+  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Cy" } })
+  await waitFor(() => expect(screen.getByText("Cy")).toBeTruthy())
+  expect(screen.queryByText("Ada")).toBeNull()
 })
