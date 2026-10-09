@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -48,6 +48,13 @@ test("Tooltip compound API provides a non-native accessible description", () => 
   render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
   expect(screen.getByText("Extra context")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
+})
+
+test("Flash renders inline status messaging without a floating toast region", () => {
+  render(<Provider><Flash type="success">Profile saved</Flash><Flash type="error" icon={false}>Could not save</Flash></Provider>)
+  expect(screen.getByRole("status").textContent).toContain("Profile saved")
+  expect(screen.getByRole("alert").textContent).toContain("Could not save")
+  expect(screen.queryByRole("region", { name: /Notifications/ })).toBeNull()
 })
 
 test("Toast API renders semantic notifications and supports dismissal", async () => {

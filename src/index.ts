@@ -95,6 +95,8 @@ export { Calendar, CalendarRoot, CalendarLabel, CalendarControl, CalendarInput, 
 export type { CalendarRootProps, CalendarLabelProps, CalendarControlProps, CalendarInputProps, CalendarTriggerProps, CalendarPositionerProps, CalendarContentProps, CalendarViewProps, CalendarViewControlProps, CalendarViewTriggerProps, CalendarPrevTriggerProps, CalendarNextTriggerProps, CalendarRangeTextProps, CalendarTableProps, CalendarTableHeaderProps, CalendarTableBodyProps, CalendarTableRowProps, CalendarTableCellProps, CalendarTableCellTriggerProps, CalendarDayTableProps, CalendarMonthSelectProps, CalendarYearSelectProps, CalendarClearTriggerProps } from "./components/calendar"
 export { InputOTP, InputOTPRoot, InputOTPGroup, InputOTPSlot, InputOTPSeparator, REGEXP_ONLY_DIGITS, REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS_AND_CHARS } from "./components/input-otp"
 export type { InputOTPRootProps, InputOTPGroupProps, InputOTPSlotProps, InputOTPSeparatorProps } from "./components/input-otp"
+export { Flash } from "./components/flash"
+export type { FlashProps, FlashType } from "./components/flash"
 export { Form, FormField, Field, useForm } from "./components/form"
 export type { Validator, UseFormOptions, FieldMeta, InputProps as FormInputProps, UseFormReturn, FieldProps } from "./components/form"
 export { Pagination, PaginationRoot, PaginationContent, PaginationPrevious, PaginationNext, PaginationPages, PaginationPageText } from "./components/pagination"
