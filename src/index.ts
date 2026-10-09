@@ -101,6 +101,8 @@ export { Attachment, AttachmentRoot, AttachmentMedia, AttachmentContent, Attachm
 export type { AttachmentStatus, AttachmentRootProps, AttachmentMediaProps, AttachmentContentProps, AttachmentNameProps, AttachmentMetaProps, AttachmentStatusProps, AttachmentActionsProps, AttachmentActionProps, AttachmentGroupProps } from "./components/attachment"
 export { FileTree } from "./components/file-tree"
 export { Graph2D, CartesianCanvas } from "./components/graph2d"
+export { Plot2D } from "./components/plot2d"
+export type { Plot2DProps } from "./components/plot2d"
 export type { Graph2DProps, GraphFunction, GraphPoint, GraphViewport } from "./components/graph2d"
 export type { FileTreeNode, FileTreeProps } from "./components/file-tree"
 export { Flash } from "./components/flash"

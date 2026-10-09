@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D } from "./index"
 
 afterEach(() => cleanup())
 
@@ -464,5 +464,14 @@ test("Graph2D plots functions and points with a labelled legend", () => {
   expect(screen.getByRole("img", { name: "Cartesian graph" })).toBeTruthy()
   expect(screen.getByText("y = x²")).toBeTruthy()
   expect(screen.getByText("P")).toBeTruthy()
+  expect(document.querySelector("svg path")?.getAttribute("d")).toContain("M")
+})
+
+test("Plot2D renders structural scene primitives and semantic scene colors", () => {
+  const scene = { kind: "2d" as const, title: "Motion plot", bounds: { xMin: -2, xMax: 2, yMin: -2, yMax: 2 }, duration: 0, frame: () => [{ t: "line" as const, pts: [[-1, -1] as [number, number], [1, 1] as [number, number]], color: "accent" }, { t: "point" as const, x: 1, y: 1, label: "Object" }], stats: () => [{ label: "Speed", value: 3, unit: "m/s" }] }
+  render(<Provider><Plot2D scene={scene} /></Provider>)
+  expect(screen.getByRole("img", { name: "Motion plot" })).toBeTruthy()
+  expect(screen.getByText("Object")).toBeTruthy()
+  expect(screen.getByText("Speed")).toBeTruthy()
   expect(document.querySelector("svg path")?.getAttribute("d")).toContain("M")
 })
