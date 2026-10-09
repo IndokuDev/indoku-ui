@@ -24,7 +24,7 @@ const buttonRecipe = {
     transition: "background-color 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease",
     cursor: "pointer",
     outline: "none",
-    _focusVisible: { borderColor: "accent.default", boxShadow: "0 0 0 3px rgb(0 0 0 / 0.15)" },
+    _focusVisible: { outline: "2px solid", outlineColor: "accent.default", outlineOffset: "2px", borderColor: "accent.default" },
     _active: { transform: "translateY(1px)" },
     _disabled: { opacity: 0.5, pointerEvents: "none", cursor: "not-allowed" },
   },

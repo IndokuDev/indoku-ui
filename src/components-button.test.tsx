@@ -33,7 +33,8 @@ for (const mode of ["light", "dark"] as const) {
     const themeCss = document.querySelector("style[data-indoku-theme]")?.textContent ?? ""
     expect(css).toContain("background:var(--indoku-colors-accent-default)")
     expect(css).toContain("background:var(--indoku-colors-bg-subtle)")
-    expect(css).toContain("box-shadow:0 0 0 3px")
+    expect(css).toContain("outline:2px solid")
+    expect(css).toContain("outline-offset:2px")
     expect(css).toContain("border-color:var(--indoku-colors-accent-default)")
     expect(css).toContain(":focus-visible")
     expect(themeCss).toContain('[data-theme="dark"]')
