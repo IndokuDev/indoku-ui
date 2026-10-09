@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Checkbox, Provider, RadioGroup, Switch, Textarea, Toggle } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Item, Progress, Provider, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle } from "./index"
 
 afterEach(() => cleanup())
 
@@ -81,4 +81,35 @@ test("RadioGroup supports controlled and disabled options", () => {
   )
   expect((screen.getByRole("radio", { name: "Medium" }) as HTMLInputElement).checked).toBe(true)
   expect((screen.getByRole("radio", { name: "Small" }) as HTMLInputElement).disabled).toBe(true)
+})
+
+
+test("display components render accessible content and basic states", () => {
+  render(<Provider><Badge>New</Badge><Card aria-label="Summary"><CardContent>Card body</CardContent></Card><Avatar name="Ada Lovelace" /><AspectRatio ratio={16 / 9}><div>Video</div></AspectRatio><Skeleton data-testid="skeleton" /><Progress value={40} label="Upload" /><Status>Online</Status><Stat label="Users" value="1,024" /><DataList items={[{ label: "Email", value: "hello@example.com" }]} /><Item title="Settings" description="Manage preferences" /><ColorSwatch value="#ff0000" /><CodeBlock code="const x = 1" /></Provider>)
+  expect(screen.getByText("New")).toBeTruthy()
+  expect(screen.getByText("Card body")).toBeTruthy()
+  expect(screen.getByRole("img", { name: "Ada Lovelace" })).toBeTruthy()
+  expect(screen.getByRole("progressbar", { name: "Upload" }).getAttribute("aria-valuenow")).toBe("40")
+  expect(screen.getByText("hello@example.com")).toBeTruthy()
+  expect(screen.getByText("const x = 1")).toBeTruthy()
+})
+
+test("Accordion supports opening an item", () => {
+  render(<Provider><Accordion items={[{ value: "faq", title: "Question", content: "Answer" }]} /></Provider>)
+  fireEvent.click(screen.getByRole("button", { name: /Question/ }))
+  expect(screen.getByText("Answer")).toBeTruthy()
+})
+
+test("ButtonGroup renders as a grouped set of actions", () => {
+  render(<Provider><ButtonGroup aria-label="Formatting"><button>Bold</button><button>Italic</button></ButtonGroup></Provider>)
+  expect(screen.getByRole("group", { name: "Formatting" })).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Italic" })).toBeTruthy()
+})
+
+
+test("Carousel renders slide content and accessible navigation", () => {
+  render(<Provider><Carousel items={[<div key="one">Slide one</div>, <div key="two">Slide two</div>]} /></Provider>)
+  expect(screen.getByText("Slide one")).toBeTruthy()
+  expect(screen.getByText("Slide two")).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Next slide" })).toBeTruthy()
 })
