@@ -24,6 +24,7 @@ const TableCellTriggerElement = indoku(ArkDatePicker.TableCellTrigger)
 const MonthSelectElement = indoku(ArkDatePicker.MonthSelect)
 const YearSelectElement = indoku(ArkDatePicker.YearSelect)
 const ClearTriggerElement = indoku(ArkDatePicker.ClearTrigger)
+const HeaderCellElement = indoku("th")
 
 export type CalendarRootProps = React.ComponentProps<typeof ArkDatePicker.Root>
 export function CalendarRoot(props: CalendarRootProps) { return <RootElement {...props} /> }
@@ -52,7 +53,7 @@ export function CalendarNextTrigger(props: CalendarNextTriggerProps) { return <N
 export type CalendarRangeTextProps = React.ComponentProps<typeof ArkDatePicker.RangeText>
 export function CalendarRangeText(props: CalendarRangeTextProps) { return <RangeTextElement fontSize="14px" fontWeight="medium" {...props} /> }
 export type CalendarTableProps = React.ComponentProps<typeof ArkDatePicker.Table>
-export function CalendarTable(props: CalendarTableProps) { return <TableElement width="100%" borderCollapse="collapse" {...props} /> }
+export function CalendarTable(props: CalendarTableProps) { return <TableElement width="100%" style={{ borderCollapse: "collapse", ...props.style }} {...props} /> }
 export type CalendarTableHeaderProps = React.ComponentProps<typeof ArkDatePicker.TableHeader>
 export function CalendarTableHeader(props: CalendarTableHeaderProps) { return <TableHeaderElement {...props} /> }
 export type CalendarTableBodyProps = React.ComponentProps<typeof ArkDatePicker.TableBody>
@@ -63,10 +64,14 @@ export type CalendarTableCellProps = React.ComponentProps<typeof ArkDatePicker.T
 export function CalendarTableCell(props: CalendarTableCellProps) { return <TableCellElement textAlign="center" p="2px" {...props} /> }
 export type CalendarTableCellTriggerProps = React.ComponentProps<typeof ArkDatePicker.TableCellTrigger>
 export function CalendarTableCellTrigger(props: CalendarTableCellTriggerProps) { return <TableCellTriggerElement type="button" w="34px" h="34px" borderRadius="md" fontSize="13px" _hover={{ bg: "bg.subtle" }} _selected={{ bg: "accent.default", color: "primary.foreground" }} _disabled={{ opacity: 0.35 }} _focusVisible={{ outline: "2px solid", outlineColor: "accent.default", outlineOffset: "1px" }} {...props} /> }
+export interface CalendarDayTableProps extends React.HTMLAttributes<HTMLTableElement> {}
+export function CalendarDayTable(props: CalendarDayTableProps) {
+  return <CalendarTable {...props}><thead><tr><ArkDatePicker.Context>{(context) => context.weekDays.map((day) => <HeaderCellElement scope="col" key={day.short} textAlign="center" color="fg.muted" fontSize="11px" fontWeight="medium" p="2px"><span aria-label={day.long}>{day.narrow}</span></HeaderCellElement>)}</ArkDatePicker.Context></tr></thead><tbody><ArkDatePicker.Context>{(context) => context.weeks.map((week, index) => <tr key={`week-${index}`}>{week.map((date) => <CalendarTableCell key={date.toString()} value={date}><CalendarTableCellTrigger>{date.day}</CalendarTableCellTrigger></CalendarTableCell>)}</tr>)}</ArkDatePicker.Context></tbody></CalendarTable>
+}
 export type CalendarMonthSelectProps = React.ComponentProps<typeof ArkDatePicker.MonthSelect>
 export function CalendarMonthSelect(props: CalendarMonthSelectProps) { return <MonthSelectElement {...props} /> }
 export type CalendarYearSelectProps = React.ComponentProps<typeof ArkDatePicker.YearSelect>
 export function CalendarYearSelect(props: CalendarYearSelectProps) { return <YearSelectElement {...props} /> }
 export type CalendarClearTriggerProps = React.ComponentProps<typeof ArkDatePicker.ClearTrigger>
 export function CalendarClearTrigger(props: CalendarClearTriggerProps) { return <ClearTriggerElement type="button" color="fg.muted" fontSize="12px" textDecoration="underline" {...props} /> }
-export const Calendar = Object.assign(CalendarRoot, { Root: CalendarRoot, Label: CalendarLabel, Control: CalendarControl, Input: CalendarInput, Trigger: CalendarTrigger, Positioner: CalendarPositioner, Content: CalendarContent, View: CalendarView, ViewControl: CalendarViewControl, ViewTrigger: CalendarViewTrigger, PrevTrigger: CalendarPrevTrigger, NextTrigger: CalendarNextTrigger, RangeText: CalendarRangeText, Table: CalendarTable, TableHeader: CalendarTableHeader, TableBody: CalendarTableBody, TableRow: CalendarTableRow, TableCell: CalendarTableCell, TableCellTrigger: CalendarTableCellTrigger, MonthSelect: CalendarMonthSelect, YearSelect: CalendarYearSelect, ClearTrigger: CalendarClearTrigger })
+export const Calendar = Object.assign(CalendarRoot, { Root: CalendarRoot, Label: CalendarLabel, Control: CalendarControl, Input: CalendarInput, Trigger: CalendarTrigger, Positioner: CalendarPositioner, Content: CalendarContent, View: CalendarView, ViewControl: CalendarViewControl, ViewTrigger: CalendarViewTrigger, PrevTrigger: CalendarPrevTrigger, NextTrigger: CalendarNextTrigger, RangeText: CalendarRangeText, Table: CalendarTable, TableHeader: CalendarTableHeader, TableBody: CalendarTableBody, TableRow: CalendarTableRow, TableCell: CalendarTableCell, TableCellTrigger: CalendarTableCellTrigger, DayTable: CalendarDayTable, MonthSelect: CalendarMonthSelect, YearSelect: CalendarYearSelect, ClearTrigger: CalendarClearTrigger })

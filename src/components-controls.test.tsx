@@ -50,6 +50,13 @@ test("Tooltip compound API provides a non-native accessible description", () => 
   expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
 })
 
+test("Calendar DayTable renders week headers and selectable date cells", () => {
+  render(<Provider><Calendar.Root open><Calendar.Positioner><Calendar.Content><Calendar.View view="day"><Calendar.ViewControl><Calendar.PrevTrigger>Previous</Calendar.PrevTrigger><Calendar.RangeText /><Calendar.NextTrigger>Next</Calendar.NextTrigger></Calendar.ViewControl><Calendar.DayTable /></Calendar.View></Calendar.Content></Calendar.Positioner></Calendar.Root></Provider>)
+  expect(screen.getByRole("grid")).toBeTruthy()
+  expect(screen.getAllByRole("columnheader").length).toBe(7)
+  expect(screen.getAllByRole("button").length).toBeGreaterThan(20)
+})
+
 test("Calendar compound API exposes labeled segmented input and trigger", () => {
   render(<Provider><Calendar.Root><Calendar.Label>Choose date</Calendar.Label><Calendar.Control><Calendar.Input /><Calendar.Trigger>Open calendar</Calendar.Trigger></Calendar.Control></Calendar.Root></Provider>)
   expect(screen.getByText("Choose date")).toBeTruthy()
