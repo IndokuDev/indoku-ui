@@ -102,6 +102,8 @@ export type { AttachmentStatus, AttachmentRootProps, AttachmentMediaProps, Attac
 export { FileTree } from "./components/file-tree"
 export { Graph2D, CartesianCanvas } from "./components/graph2d"
 export { Plot2D } from "./components/plot2d"
+export { Plot3D } from "./components/plot3d"
+export type { Plot3DProps } from "./components/plot3d"
 export type { Plot2DProps } from "./components/plot2d"
 export type { Graph2DProps, GraphFunction, GraphPoint, GraphViewport } from "./components/graph2d"
 export type { FileTreeNode, FileTreeProps } from "./components/file-tree"

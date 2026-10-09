@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D } from "./index"
 
 afterEach(() => cleanup())
 
@@ -474,4 +474,14 @@ test("Plot2D renders structural scene primitives and semantic scene colors", () 
   expect(screen.getByText("Object")).toBeTruthy()
   expect(screen.getByText("Speed")).toBeTruthy()
   expect(document.querySelector("svg path")?.getAttribute("d")).toContain("M")
+})
+
+test("Plot3D exposes an accessible canvas and camera controls", () => {
+  const getContext = vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null)
+  const scene = { kind: "3d" as const, title: "Molecule", duration: 0, radius: 2, frame: () => [{ t: "sphere" as const, pos: [0, 0, 0] as [number, number, number], r: 0.5, label: "Atom" }] }
+  render(<Provider><Plot3D scene={scene} /></Provider>)
+  expect(screen.getByRole("img", { name: "Molecule" })).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Zoom in" })).toBeTruthy()
+  fireEvent.click(screen.getByRole("button", { name: "Reset view" }))
+  getContext.mockRestore()
 })
