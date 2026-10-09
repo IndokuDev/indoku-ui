@@ -108,10 +108,15 @@ test("Accordion supports opening an item", () => {
   expect(screen.getByText("Answer")).toBeTruthy()
 })
 
-test("ButtonGroup renders as a grouped set of actions", () => {
-  render(<Provider><ButtonGroup aria-label="Formatting"><button>Bold</button><button>Italic</button></ButtonGroup></Provider>)
-  expect(screen.getByRole("group", { name: "Formatting" })).toBeTruthy()
+test("ButtonGroup defaults to attached segments and supports vertical orientation", () => {
+  const { rerender } = render(<Provider><ButtonGroup aria-label="Formatting"><button>Bold</button><button>Italic</button></ButtonGroup></Provider>)
+  const group = screen.getByRole("group", { name: "Formatting" })
+  expect(group).toBeTruthy()
+  expect(group.getAttribute("class")).toContain("indoku-")
   expect(screen.getByRole("button", { name: "Italic" })).toBeTruthy()
+  rerender(<Provider><ButtonGroup aria-label="Vertical actions" orientation="vertical" attached={false}><button>Up</button><button>Down</button></ButtonGroup></Provider>)
+  expect(screen.getByRole("group", { name: "Vertical actions" })).toBeTruthy()
+  expect(screen.getByRole("button", { name: "Down" })).toBeTruthy()
 })
 
 

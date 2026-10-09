@@ -230,7 +230,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 ### Batch 1 — Existing basics and composable display components
 
 - [ ] Button — variants, sizes, icon sizes, loading/disabled, focus, polymorphism, and public API conformance.
-- [ ] ButtonGroup — attached layout, orientation, shared size/variant, child composition.
+- [x] ButtonGroup — legacy attached-by-default layout, horizontal/vertical segmentation, focus stacking, and child size propagation restored through Indoku styling; covered by tests.
 - [ ] Badge — variants, semantic colors, inline layout.
 - [ ] Card — Root, Header, Title, Description, Content, Footer; variants and layout composition.
 - [ ] Avatar — Root, Image, Fallback, Group, GroupCount; loading/error fallback and accessible labeling.
@@ -328,6 +328,7 @@ This is a foundation. Continue validating behavior against public Chakra UI v3.3
 - [x] Add ToggleGroup compound API (`Root`/`Item`) using Indoku primitives and shared context; add initial single/multiple/disabled behavior tests.
 - [x] Add `Item.Actions` compound slot matching the legacy Item API.
 - [x] Port `ui-old` lightweight syntax tokenizer and restore the legacy CodeBlock feature set without Chakra runtime; add conformance coverage for line numbers, highlighted lines, and expand/collapse.
+- [x] Align ButtonGroup with the legacy API: attached segments by default, orientation-aware borders, focus stacking, and size propagation. Add a data-state attribute and tokenized focus outline to Toggle.
 - [ ] Rewrite Carousel against the legacy composable API and verify every requested interaction/indicator layout.
 - [ ] Add Lucide icons as the shared icon dependency where appropriate, beginning with ColorModeButton sun/moon icons.
 - [ ] Start Batch 0 full inventory and proceed sequentially through batches; keep this checklist accurate as work lands.
