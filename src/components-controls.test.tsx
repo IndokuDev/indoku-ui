@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree } from "./index"
 
 afterEach(() => cleanup())
 
@@ -447,4 +447,14 @@ test("ToggleGroup supports multiple values and disabled state", () => {
   fireEvent.click(screen.getByRole("button", { name: "Bold" }))
   expect(onValueChange).toHaveBeenCalledWith([])
   expect((screen.getByRole("button", { name: "Italic" }) as HTMLButtonElement).disabled).toBe(true)
+})
+
+test("FileTree renders nested nodes and expands folders with accessible tree semantics", () => {
+  render(<Provider><FileTree label="Project files" items={[{ id: "src", name: "src", children: [{ id: "app", name: "app.tsx" }] }, { id: "package", name: "package.json" }]} defaultExpandedValue={[]} /></Provider>)
+  expect(screen.getByRole("tree", { name: "Project files" })).toBeTruthy()
+  const folder = screen.getByText("src")
+  expect(folder).toBeTruthy()
+  fireEvent.click(folder)
+  expect(screen.getByText("app.tsx")).toBeTruthy()
+  expect(screen.getByText("package.json")).toBeTruthy()
 })

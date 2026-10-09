@@ -99,6 +99,8 @@ export { InputOTP, InputOTPRoot, InputOTPGroup, InputOTPSlot, InputOTPSeparator,
 export type { InputOTPRootProps, InputOTPGroupProps, InputOTPSlotProps, InputOTPSeparatorProps } from "./components/input-otp"
 export { Attachment, AttachmentRoot, AttachmentMedia, AttachmentContent, AttachmentName, AttachmentMeta, AttachmentStatusView, AttachmentActions, AttachmentAction, AttachmentRemove, AttachmentGroup } from "./components/attachment"
 export type { AttachmentStatus, AttachmentRootProps, AttachmentMediaProps, AttachmentContentProps, AttachmentNameProps, AttachmentMetaProps, AttachmentStatusProps, AttachmentActionsProps, AttachmentActionProps, AttachmentGroupProps } from "./components/attachment"
+export { FileTree } from "./components/file-tree"
+export type { FileTreeNode, FileTreeProps } from "./components/file-tree"
 export { Flash } from "./components/flash"
 export type { FlashProps, FlashType } from "./components/flash"
 export { Form, FormField, Field, useForm } from "./components/form"
