@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Checkbox, Provider, Switch, Textarea, Toggle } from "./index"
+import { Checkbox, Provider, RadioGroup, Switch, Textarea, Toggle } from "./index"
 
 afterEach(() => cleanup())
 
@@ -48,4 +48,37 @@ test("Toggle supports uncontrolled pressed state and Textarea native props", () 
   fireEvent.click(toggle)
   expect(toggle.getAttribute("aria-pressed")).toBe("true")
   expect(screen.getByPlaceholderText("Write something").tagName).toBe("TEXTAREA")
+})
+
+test("RadioGroup selects one option and reports the selected value", async () => {
+  const onValueChange = vi.fn()
+  render(
+    <Provider>
+      <RadioGroup
+        aria-label="Plan"
+        name="plan"
+        defaultValue="basic"
+        onValueChange={onValueChange}
+        items={[{ label: "Basic", value: "basic" }, { label: "Pro", value: "pro" }]}
+      />
+    </Provider>,
+  )
+  const basic = screen.getByRole("radio", { name: "Basic" }) as HTMLInputElement
+  const pro = screen.getByRole("radio", { name: "Pro" }) as HTMLInputElement
+  expect(basic.checked).toBe(true)
+  expect(pro.checked).toBe(false)
+  fireEvent.click(pro)
+  expect(onValueChange).toHaveBeenCalledWith("pro")
+  expect(pro.checked).toBe(true)
+  expect(basic.checked).toBe(false)
+})
+
+test("RadioGroup supports controlled and disabled options", () => {
+  render(
+    <Provider>
+      <RadioGroup aria-label="Size" value="medium" disabled items={[{ label: "Small", value: "small" }, { label: "Medium", value: "medium" }]} />
+    </Provider>,
+  )
+  expect((screen.getByRole("radio", { name: "Medium" }) as HTMLInputElement).checked).toBe(true)
+  expect((screen.getByRole("radio", { name: "Small" }) as HTMLInputElement).disabled).toBe(true)
 })
