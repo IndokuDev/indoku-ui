@@ -1,9 +1,15 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Item, Label, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, Dialog, Item, Label, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Popover, Progress, Provider, Tooltip, RadioGroup, Skeleton, Stat, Status, Switch, Textarea, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
+
+test("Menu compound API renders menu items with accessible roles", () => {
+  render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
+  expect(screen.getByRole("menuitem", { name: "Edit" })).toBeTruthy()
+  expect(screen.getByRole("menuitem", { name: "Delete" })).toBeTruthy()
+})
 
 test("Tooltip compound API provides a non-native accessible description", () => {
   render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
