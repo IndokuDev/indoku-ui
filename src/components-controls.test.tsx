@@ -2,7 +2,7 @@ import * as React from "react"
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, RangeBarChart, CandlestickChart, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, Bubble, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, Menubar, Message, MessageScroller, NavigationMenu, PasswordInput, Questionnaire, MathRenderer, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Prose, FormulaBlock, QrCode, useQrMatrix, RichTextEditor, sanitizeHtml, Progress, Provider, Tooltip, useForm, RadioGroup, Resizable, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Time, Toaster, toast, Toggle, ToggleGroup, FileTree, Graph2D, Plot2D, Plot3D, PeriodicTable, ModelLab, LineChart, BarChart, Histogram, BarSegment, ScatterChart, RadarChart, RangeBarChart, CandlestickChart, Command, commandScore, PieChart, Sparkline, niceDomain, sortChartData } from "./index"
 
 afterEach(() => cleanup())
 
@@ -523,4 +523,16 @@ test("Chart primitives render accessible SVGs and expose stable data helpers", (
   expect(screen.getByRole("img", { name: /Sparkline:/ })).toBeTruthy()
   expect(niceDomain(0, 10).domain[0]).toBe(0)
   expect(sortChartData([{ n: 1 }, { n: 3 }], (item) => item.n)[0]?.n).toBe(3)
+})
+
+test("Command filters by text and keywords and supports keyboard selection", async () => {
+  const onSelect = vi.fn()
+  render(<Provider><Command.Root><Command.Input placeholder="Search commands" /><Command.List><Command.Empty>No matches</Command.Empty><Command.Group heading="Actions"><Command.Item value="Open file" keywords={["document"]} onSelect={onSelect}>Open file</Command.Item><Command.Item value="Close window" onSelect={onSelect}>Close window</Command.Item></Command.Group></Command.List></Command.Root></Provider>)
+  const input = screen.getByRole("combobox")
+  fireEvent.change(input, { target: { value: "doc" } })
+  await waitFor(() => expect(screen.getByText("Open file")).toBeTruthy())
+  expect(screen.queryByText("Close window")).toBeNull()
+  fireEvent.keyDown(input, { key: "Enter" })
+  expect(onSelect).toHaveBeenCalledWith("Open file")
+  expect(commandScore("Open file", "open")).toBeGreaterThan(0)
 })
