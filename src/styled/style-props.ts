@@ -352,6 +352,8 @@ export const styleProps = (
   const styleKeys = new Set(Object.keys(aliases))
 
   for (const [prop, value] of Object.entries(props)) {
+    if (value === undefined) continue
+
     if (prop === "css") {
       if (value && typeof value === "object") Object.assign(style, value)
       continue
