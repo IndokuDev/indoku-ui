@@ -5,6 +5,17 @@ import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, 
 
 afterEach(() => cleanup())
 
+test("Avatar exposes compound slots and switches from fallback to image", () => {
+  render(<Provider><Avatar.Root src="avatar.png" name="Ada Lovelace"><Avatar.Image data-testid="avatar-image" /><Avatar.Fallback>AL</Avatar.Fallback></Avatar.Root></Provider>)
+  const image = screen.getByTestId("avatar-image")
+  const fallback = screen.getByText("AL")
+  expect(fallback.hasAttribute("hidden")).toBe(false)
+  fireEvent.load(image)
+  expect(fallback.hasAttribute("hidden")).toBe(true)
+  fireEvent.error(image)
+  expect(fallback.hasAttribute("hidden")).toBe(false)
+})
+
 test("Checkbox toggles with pointer input and reports the updated checked state", () => {
   const onCheckedChange = vi.fn()
   render(<Provider><Checkbox onCheckedChange={onCheckedChange}>Accept terms</Checkbox></Provider>)

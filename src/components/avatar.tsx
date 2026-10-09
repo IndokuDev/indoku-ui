@@ -1,10 +1,57 @@
 import * as React from "react"
 import { indoku } from "../primitives/indoku"
-const Root = indoku("span"), Image = indoku("img"), Fallback = indoku("span")
-export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> { src?: string; alt?: string; name?: string; fallback?: React.ReactNode; size?: "xs" | "sm" | "md" | "lg" | "xl" }
-export function Avatar({ src, alt, name, fallback, size = "md", children, ...props }: AvatarProps) {
- const [failed, setFailed] = React.useState(false)
- const d = ({ xs: "24px", sm: "32px", md: "40px", lg: "48px", xl: "64px" } as const)[size]
- const initials = name?.trim().split(/\s+/).slice(0, 2).map(x => x[0]).join("").toUpperCase()
- return <Root role="img" aria-label={alt ?? name ?? "Avatar"} position="relative" display="inline-flex" alignItems="center" justifyContent="center" overflow="hidden" flexShrink={0} w={d} h={d} borderRadius="full" bg="bg.subtle" color="fg.default" fontWeight="medium" fontSize={size === "xs" || size === "sm" ? "11px" : "14px"} {...props}>{src && !failed ? <Image src={src} alt={alt ?? name ?? ""} w="100%" h="100%" objectFit="cover" onError={() => setFailed(true)} /> : <Fallback as="span">{fallback ?? children ?? initials ?? "?"}</Fallback>}</Root>
+
+const RootView = indoku("span")
+const ImageView = indoku("img")
+const FallbackView = indoku("span")
+const GroupView = indoku("div")
+const GroupCountView = indoku("span")
+
+type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl"
+const dimensions: Record<AvatarSize, string> = { xs: "24px", sm: "32px", md: "40px", lg: "48px", xl: "64px" }
+
+interface AvatarContextValue { failed: boolean; loaded: boolean; setFailed: (failed: boolean) => void; setLoaded: (loaded: boolean) => void; size: AvatarSize; name?: string; alt?: string; src?: string }
+const AvatarContext = React.createContext<AvatarContextValue | null>(null)
+function useAvatarContext() {
+  const value = React.useContext(AvatarContext)
+  if (!value) throw new Error("Avatar subcomponents must be used within Avatar.Root")
+  return value
 }
+
+export interface AvatarRootProps extends React.HTMLAttributes<HTMLSpanElement> {
+  src?: string
+  alt?: string
+  name?: string
+  size?: AvatarSize
+  fallback?: React.ReactNode
+}
+export function AvatarRoot({ src, alt, name, size = "md", fallback, children, ...props }: AvatarRootProps) {
+  const [failed, setFailed] = React.useState(false)
+  const [loaded, setLoaded] = React.useState(false)
+  const initials = name?.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase()
+  const value = React.useMemo(() => ({ failed, loaded, setFailed, setLoaded, size, name, alt, src }), [failed, loaded, size, name, alt, src])
+  return <AvatarContext.Provider value={value}><RootView role="img" aria-label={alt ?? name ?? "Avatar"} position="relative" display="inline-flex" alignItems="center" justifyContent="center" overflow="hidden" flexShrink={0} w={dimensions[size]} h={dimensions[size]} borderRadius="full" bg="bg.subtle" color="fg.default" fontWeight="medium" fontSize={size === "xs" || size === "sm" ? "11px" : "14px"} {...props}>{children ?? <><AvatarImage src={src} alt={alt ?? name ?? ""} />{(!loaded || failed || !src) && <AvatarFallback>{fallback ?? initials ?? "?"}</AvatarFallback>}</>}</RootView></AvatarContext.Provider>
+}
+export interface AvatarImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "alt"> { alt?: string }
+export function AvatarImage({ onError, ...props }: AvatarImageProps) {
+  const { failed, setFailed, setLoaded, alt, name, src: rootSrc } = useAvatarContext()
+  const src = props.src ?? rootSrc
+  if (failed || !src) return null
+  return <ImageView {...props} src={src} alt={props.alt ?? alt ?? name ?? ""} w="100%" h="100%" objectFit="cover" onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => { setLoaded(true); props.onLoad?.(event) }} onError={(event: React.SyntheticEvent<HTMLImageElement>) => { setFailed(true); onError?.(event) }} />
+}
+export interface AvatarFallbackProps extends React.HTMLAttributes<HTMLSpanElement> { delayMs?: number }
+export function AvatarFallback({ children, ...props }: AvatarFallbackProps) {
+  const { failed, loaded, src } = useAvatarContext()
+  return <FallbackView data-state={loaded && !failed ? "hidden" : "visible"} hidden={Boolean(src && loaded && !failed)} {...props}>{children}</FallbackView>
+}
+export interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> { size?: AvatarSize; spacing?: string }
+export function AvatarGroup({ size = "md", spacing = "-8px", children, ...props }: AvatarGroupProps) {
+  return <GroupView display="inline-flex" alignItems="center" flexDirection="row" {...props} data-size={size} css={{ "& > * + *": { marginInlineStart: spacing }, "& > *": { border: "2px solid", borderColor: "bg.surface" } }}>{children}</GroupView>
+}
+export interface AvatarGroupCountProps extends React.HTMLAttributes<HTMLSpanElement> { size?: AvatarSize }
+export function AvatarGroupCount({ size = "md", ...props }: AvatarGroupCountProps) {
+  return <GroupCountView display="inline-flex" alignItems="center" justifyContent="center" flexShrink={0} w={dimensions[size]} h={dimensions[size]} borderRadius="full" bg="bg.subtle" color="fg.default" fontSize={size === "xs" || size === "sm" ? "11px" : "14px"} fontWeight="medium" {...props} />
+}
+
+export interface AvatarProps extends AvatarRootProps {}
+export const Avatar = Object.assign(AvatarRoot, { Root: AvatarRoot, Image: AvatarImage, Fallback: AvatarFallback, Group: AvatarGroup, GroupCount: AvatarGroupCount })
