@@ -33,8 +33,8 @@ const ProgressText = indoku(ArkCarousel.ProgressText)
 function CarouselComponent({ items, slidesPerPage = 1, spacing = "12px", loop = false, autoplay = false, page, defaultPage, onPageChange, orientation = "horizontal", allowMouseDrag = false, className, label = "Carousel" }: CarouselProps) {
   return (
     <Root className={className} slideCount={items.length} page={page} defaultPage={defaultPage} onPageChange={onPageChange} slidesPerPage={slidesPerPage} spacing={spacing} loop={loop} orientation={orientation} allowMouseDrag={allowMouseDrag} autoplay={autoplay ? { delay: 4000 } : undefined} aria-label={label} style={{ width: "100%" }}>
-      <ItemGroup style={{ display: "flex", gap: spacing, overflow: "hidden" }}>
-        {items.map((content, index) => <Item key={index} index={index} style={{ minWidth: 0 }}>{content}</Item>)}
+      <ItemGroup style={{ display: "flex", gap: spacing, overflow: "hidden", alignItems: "stretch" }}>
+        {items.map((content, index) => <Item key={index} index={index} style={{ boxSizing: "border-box", flex: `0 0 calc((100% - ${Math.max(0, slidesPerPage - 1) * (Number.parseFloat(spacing) || 0)}px) / ${slidesPerPage})`, minWidth: 0 }}>{content}</Item>)}
       </ItemGroup>
       <Control style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 12 }}>
         <PrevTrigger aria-label="Previous slide" style={triggerStyle}>‹</PrevTrigger>
