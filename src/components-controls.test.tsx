@@ -162,6 +162,15 @@ test("LineChart supports a separate right-axis scale and formatter", () => {
   expect(Array.from(chart.querySelectorAll("text")).some((node) => node.textContent === "Right target")).toBe(true)
 })
 
+test("Cartesian charts forward SVG attributes and event handlers", () => {
+  const onClick = vi.fn()
+  const { container } = render(<Provider><LineChart data-testid="custom-line-chart" onClick={onClick} className="consumer-chart" series={[{ name: "A", values: [1, 2] }]} /></Provider>)
+  const svg = container.querySelector('svg[data-testid="custom-line-chart"]')!
+  expect(svg.classList.contains("consumer-chart")).toBe(true)
+  fireEvent.click(svg)
+  expect(onClick).toHaveBeenCalledTimes(1)
+})
+
 test("Menu compound API renders menu items with accessible roles", () => {
   render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
   expect(screen.getByRole("menuitem", { name: "Edit" })).toBeTruthy()
