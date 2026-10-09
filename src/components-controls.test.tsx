@@ -131,6 +131,12 @@ test("CodeBlock supports line numbers, highlighted lines, and collapsible conten
   expect(screen.getByRole("button", { name: "Show less" })).toBeTruthy()
 })
 
+test("Accordion compound API composes trigger, indicator, and content", () => {
+  render(<Provider><Accordion.Root defaultValue={["faq"]}><Accordion.Item value="faq"><Accordion.ItemTrigger>Compound question<Accordion.ItemIndicator>⌄</Accordion.ItemIndicator></Accordion.ItemTrigger><Accordion.ItemContent>Compound answer</Accordion.ItemContent></Accordion.Item></Accordion.Root></Provider>)
+  expect(screen.getByText("Compound answer")).toBeTruthy()
+  expect(screen.getByRole("button", { name: /Compound question/ }).getAttribute("aria-expanded")).toBe("true")
+})
+
 test("Accordion supports opening an item", () => {
   render(<Provider><Accordion items={[{ value: "faq", title: "Question", content: "Answer" }]} /></Provider>)
   fireEvent.click(screen.getByRole("button", { name: /Question/ }))
