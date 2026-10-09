@@ -45,7 +45,12 @@ export function FormField({ meta, label, helperText, required, children, ...prop
   const childId = React.isValidElement(children) ? (children.props as { id?: string }).id ?? id : id
   const errorId = `${childId}-error`
   const helperId = `${childId}-helper`
-  const child = React.isValidElement(children) ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, { id: childId, "aria-invalid": meta.invalid || undefined, "aria-describedby": meta.error ? errorId : helperText ? helperId : undefined, ...(children.type === "input" ? { onValueChange: undefined } : {}) }) : children
+  let child: React.ReactNode = children
+  if (React.isValidElement(children)) {
+    const childProps: Record<string, unknown> = { ...(children.props as Record<string, unknown>), id: childId, "aria-invalid": meta.invalid || undefined, "aria-describedby": meta.error ? errorId : helperText ? helperId : undefined }
+    if (children.type === "input") delete childProps.onValueChange
+    child = React.cloneElement(children as React.ReactElement<Record<string, unknown>>, childProps)
+  }
   return <FieldRoot display="flex" flexDirection="column" gap="6px" {...props}>{label && <Label htmlFor={childId} required={required}>{label}</Label>}{child}{helperText && !meta.error && <HelperText id={helperId} fontSize="12px" color="fg.muted">{helperText}</HelperText>}{meta.error && <ErrorText id={errorId} role="alert" fontSize="12px" color="status.danger">{meta.error}</ErrorText>}</FieldRoot>
 }
 export { FormField as Field }
