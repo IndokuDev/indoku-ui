@@ -129,6 +129,13 @@ test("NavigationMenu compound API exposes navigable triggers and links", () => {
   expect(screen.getByRole("link", { name: "Documentation" })).toBeTruthy()
 })
 
+test("NavigationMenu restores legacy mega-menu ContentGrid and ContentLink helpers", () => {
+  render(<Provider><NavigationMenu.ContentGrid columns={3} data-testid="mega-grid"><NavigationMenu.ContentLink href="/docs" title="Docs" description="Guides and API reference" /></NavigationMenu.ContentGrid></Provider>)
+  const grid = screen.getByTestId("mega-grid")
+  expect(grid.style.gridTemplateColumns).toBe("repeat(3, minmax(0, 1fr))")
+  expect(screen.getByRole("link", { name: "Docs Guides and API reference" }).getAttribute("href")).toBe("/docs")
+})
+
 test("Menu compound API renders menu items with accessible roles", () => {
   render(<Provider><Menu.Root open><Menu.Trigger>Actions</Menu.Trigger><Menu.Positioner><Menu.Content><Menu.Item value="edit">Edit</Menu.Item><Menu.Separator /><Menu.Item value="delete">Delete</Menu.Item></Menu.Content></Menu.Positioner></Menu.Root></Provider>)
   expect(screen.getByRole("menuitem", { name: "Edit" })).toBeTruthy()
