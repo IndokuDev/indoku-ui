@@ -146,9 +146,11 @@ test("AreaChart honors the legacy gradient toggle", () => {
 })
 
 test("LineChart applies its gradient option when area fill is enabled", () => {
-  const { container } = render(<Provider><LineChart series={[{ name: "A", values: [1, 3, 2] }]} area gradient /><LineChart series={[{ name: "B", values: [2, 1, 3] }]} area gradient={false} /></Provider>)
+  const { container } = render(<Provider><LineChart series={[{ name: "Revenue", values: [1, null, 3] }]} gradient connectNulls seriesLabels /><LineChart series={[{ name: "B", values: [2, 1, 3] }]} area gradient={false} /></Provider>)
   const charts = Array.from(container.querySelectorAll('svg[aria-label="Line chart"]'))
   expect(charts[0]?.querySelector("linearGradient")).toBeTruthy()
+  expect(Array.from(charts[0]?.querySelectorAll("text") ?? []).some((node) => node.textContent === "Revenue")).toBe(true)
+  expect((charts[0]?.querySelector("path")?.getAttribute("d")?.match(/M/g) ?? [])).toHaveLength(1)
   expect(charts[1]?.querySelector("linearGradient")).toBeNull()
 })
 
