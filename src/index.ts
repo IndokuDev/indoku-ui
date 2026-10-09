@@ -95,6 +95,8 @@ export { Calendar, CalendarRoot, CalendarLabel, CalendarControl, CalendarInput, 
 export type { CalendarRootProps, CalendarLabelProps, CalendarControlProps, CalendarInputProps, CalendarTriggerProps, CalendarPositionerProps, CalendarContentProps, CalendarViewProps, CalendarViewControlProps, CalendarViewTriggerProps, CalendarPrevTriggerProps, CalendarNextTriggerProps, CalendarRangeTextProps, CalendarTableProps, CalendarTableHeaderProps, CalendarTableBodyProps, CalendarTableRowProps, CalendarTableCellProps, CalendarTableCellTriggerProps, CalendarDayTableProps, CalendarMonthSelectProps, CalendarYearSelectProps, CalendarClearTriggerProps } from "./components/calendar"
 export { InputOTP, InputOTPRoot, InputOTPGroup, InputOTPSlot, InputOTPSeparator, REGEXP_ONLY_DIGITS, REGEXP_ONLY_CHARS, REGEXP_ONLY_DIGITS_AND_CHARS } from "./components/input-otp"
 export type { InputOTPRootProps, InputOTPGroupProps, InputOTPSlotProps, InputOTPSeparatorProps } from "./components/input-otp"
+export { Attachment, AttachmentRoot, AttachmentMedia, AttachmentContent, AttachmentName, AttachmentMeta, AttachmentStatusView, AttachmentActions, AttachmentAction, AttachmentRemove, AttachmentGroup } from "./components/attachment"
+export type { AttachmentStatus, AttachmentRootProps, AttachmentMediaProps, AttachmentContentProps, AttachmentNameProps, AttachmentMetaProps, AttachmentStatusProps, AttachmentActionsProps, AttachmentActionProps, AttachmentGroupProps } from "./components/attachment"
 export { Flash } from "./components/flash"
 export type { FlashProps, FlashType } from "./components/flash"
 export { Form, FormField, Field, useForm } from "./components/form"

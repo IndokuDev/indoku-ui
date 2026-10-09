@@ -1,7 +1,7 @@
 /** @vitest-environment jsdom */
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, test, vi } from "vitest"
-import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
+import { Accordion, AspectRatio, Attachment, Avatar, Badge, ButtonGroup, Card, CardContent, Calendar, Carousel, Checkbox, CodeBlock, ColorSwatch, DataList, DateInputField, DatePickerField, Dialog, Direction, Empty, Field, Flash, Form, InputOTP, Item, Kbd, KbdGroup, Label, Marker, Menu, PasswordInput, PasswordStrengthMeter, passwordStrength, Pagination, Popover, Progress, Provider, Tooltip, useForm, RadioGroup, ScrollArea, Skeleton, Stat, Status, Switch, Textarea, Toaster, toast, Toggle, ToggleGroup } from "./index"
 
 afterEach(() => cleanup())
 
@@ -48,6 +48,15 @@ test("Tooltip compound API provides a non-native accessible description", () => 
   render(<Provider><Tooltip.Root open><Tooltip.Trigger>Hover target</Tooltip.Trigger><Tooltip.Positioner><Tooltip.Content>Extra context</Tooltip.Content></Tooltip.Positioner></Tooltip.Root></Provider>)
   expect(screen.getByText("Extra context")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Hover target" }).getAttribute("title")).toBeNull()
+})
+
+test("Attachment compound API formats metadata and supports keyboard activation", () => {
+  const onClick = vi.fn()
+  render(<Provider><Attachment.Root onClick={onClick}><Attachment.Media kind="code" /><Attachment.Content><Attachment.Name>app.tsx</Attachment.Name><Attachment.Meta size={12000} format="TSX" /><Attachment.Status status="uploading" progress={64} variant="text" /></Attachment.Content><Attachment.Actions><Attachment.Remove /></Attachment.Actions></Attachment.Root></Provider>)
+  expect(screen.getByText("TSX · 11.7 KB")).toBeTruthy()
+  expect(screen.getByText("Uploading · 64%")).toBeTruthy()
+  fireEvent.keyDown(screen.getByRole("button", { name: /app.tsx/ }), { key: "Enter" })
+  expect(onClick).toHaveBeenCalledOnce()
 })
 
 test("Flash renders inline status messaging without a floating toast region", () => {
