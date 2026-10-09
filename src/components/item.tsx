@@ -1,9 +1,29 @@
 import * as React from "react"
 import { indoku } from "../primitives/indoku"
 const Root = indoku("div"), Media = indoku("div"), Content = indoku("div"), Title = indoku("div"), Description = indoku("div"), End = indoku("div"), Actions = indoku("div")
-export interface ItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> { title?: React.ReactNode; description?: React.ReactNode; startElement?: React.ReactNode; endElement?: React.ReactNode; variant?: "outline" | "subtle" | "plain"; interactive?: boolean; }
-function ItemRoot({ title, description, startElement, endElement, variant = "plain", interactive = false, children, ...props }: ItemProps) {
+export interface ItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> { title?: React.ReactNode; description?: React.ReactNode; startElement?: React.ReactNode; endElement?: React.ReactNode; variant?: "outline" | "subtle" | "plain"; interactive?: boolean; asChild?: boolean; }
+function ItemRoot({ title, description, startElement, endElement, variant = "plain", interactive = false, asChild = false, children, ...props }: ItemProps) {
   const hasSummaryProps = title !== undefined || description !== undefined || startElement !== undefined || endElement !== undefined
+  if (asChild && React.isValidElement(children)) {
+    const child = children as React.ReactElement<{ className?: string; style?: React.CSSProperties }>
+    const { className, style, ...childProps } = props
+    const rootStyle: React.CSSProperties = {
+      display: "flex", alignItems: "center", gap: "12px",
+      padding: variant === "plain" ? 0 : "12px",
+      border: variant === "outline" ? "1px solid var(--indoku-colors-border-subtle)" : "none",
+      borderRadius: "var(--indoku-radii-lg, 8px)",
+      background: variant === "subtle" ? "var(--indoku-colors-bg-subtle)" : "transparent",
+      cursor: interactive ? "pointer" : undefined,
+      ...child.props.style,
+      ...style,
+    }
+    return React.cloneElement(child, {
+      ...childProps,
+      className: [child.props.className, className].filter(Boolean).join(" ") || undefined,
+      style: rootStyle,
+      ...(interactive ? { "data-item-interactive": "" } : {}),
+    })
+  }
   return <Root display="flex" alignItems="center" gap="12px" p={variant === "plain" ? "0" : "12px"} border={variant === "outline" ? "1px solid" : "none"} borderColor="border.subtle" borderRadius="lg" bg={variant === "subtle" ? "bg.subtle" : "transparent"} cursor={interactive ? "pointer" : undefined} _hover={interactive ? { bg: "bg.subtle" } : undefined} {...props}>
     {hasSummaryProps ? <>
       {startElement !== undefined && <Media display="flex" alignItems="center" justifyContent="center" flexShrink={0}>{startElement}</Media>}

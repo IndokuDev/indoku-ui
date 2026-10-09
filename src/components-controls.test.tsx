@@ -631,6 +631,16 @@ test("Item.Root preserves direct compound-part composition", () => {
   expect(screen.getByText("Description")).toBeTruthy()
 })
 
+test("Item.Root asChild applies layout to a semantic child element", () => {
+  const { container } = render(<Provider><Item.Root asChild interactive variant="outline"><li data-testid="item-list-row" className="consumer-row" style={{ marginTop: 4 }}>List row</li></Item.Root></Provider>)
+  const row = container.querySelector<HTMLLIElement>("li[data-testid='item-list-row']")!
+  expect(row.classList.contains("consumer-row")).toBe(true)
+  expect(row.style.display).toBe("flex")
+  expect(row.style.cursor).toBe("pointer")
+  expect(row.style.border).toContain("solid")
+  expect(screen.getByText("List row")).toBeTruthy()
+})
+
 test("Item interactive prop enables pointer affordance without changing its content API", () => {
   render(<Provider><Item interactive data-testid="interactive-item" title="Settings" description="Manage preferences" /></Provider>)
   expect(screen.getByTestId("interactive-item")).toBeTruthy()
