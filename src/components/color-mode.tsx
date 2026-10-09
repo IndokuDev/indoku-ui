@@ -26,7 +26,6 @@ export function ColorModeButton({
       size="icon"
       onClick={toggleColorMode}
       aria-label={ariaLabel ?? label ?? `Switch to ${nextMode} mode`}
-      title={label ?? `Switch to ${nextMode} mode`}
       {...props}
     >
       {colorMode === "dark" ? darkIcon : lightIcon}
