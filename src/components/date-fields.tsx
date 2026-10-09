@@ -36,4 +36,4 @@ export function DateInputField({ label, value, defaultValue, onValueChange, min,
     {range ? <><DateInputHiddenElement index={0} /><DateInputHiddenElement index={1} /></> : <DateInputHiddenElement />}
   </DateInputRootElement>
 }
-export { parseDate, type DateValue }
+export { parseDate, today, getLocalTimeZone, type DateValue } from "@internationalized/date"
