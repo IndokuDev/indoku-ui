@@ -621,6 +621,16 @@ test("Avatar fallback honors delay and appears immediately after image failure",
 })
 
 
+test("Item.Root preserves direct compound-part composition", () => {
+  const { container } = render(<Provider><Item.Root data-testid="compound-item"><Item.Media data-testid="compound-media"><span>Icon</span></Item.Media><Item.Content data-testid="compound-content"><Item.Title>Title</Item.Title><Item.Description>Description</Item.Description></Item.Content><Item.Actions data-testid="compound-actions"><button>Open</button></Item.Actions></Item.Root></Provider>)
+  const root = container.querySelector('[data-testid="compound-item"]')!
+  expect(root.children[0]?.getAttribute("data-testid")).toBe("compound-media")
+  expect(root.children[1]?.getAttribute("data-testid")).toBe("compound-content")
+  expect(root.children[2]?.getAttribute("data-testid")).toBe("compound-actions")
+  expect(screen.getByText("Title")).toBeTruthy()
+  expect(screen.getByText("Description")).toBeTruthy()
+})
+
 test("Item interactive prop enables pointer affordance without changing its content API", () => {
   render(<Provider><Item interactive data-testid="interactive-item" title="Settings" description="Manage preferences" /></Provider>)
   expect(screen.getByTestId("interactive-item")).toBeTruthy()
