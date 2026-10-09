@@ -5,6 +5,17 @@ import { Accordion, AspectRatio, Avatar, Badge, ButtonGroup, Card, CardContent, 
 
 afterEach(() => cleanup())
 
+test("ToggleGroup roves focus with orientation-aware arrow keys", () => {
+  render(<Provider><ToggleGroup.Root orientation="horizontal"><ToggleGroup.Item value="left">Left</ToggleGroup.Item><ToggleGroup.Item value="right">Right</ToggleGroup.Item><ToggleGroup.Item value="third" disabled>Disabled</ToggleGroup.Item></ToggleGroup.Root></Provider>)
+  const left = screen.getByRole("button", { name: "Left" })
+  const right = screen.getByRole("button", { name: "Right" })
+  expect(left.tabIndex).toBe(0)
+  expect(right.tabIndex).toBe(-1)
+  left.focus()
+  fireEvent.keyDown(left.parentElement!, { key: "ArrowRight" })
+  expect(document.activeElement).toBe(right)
+})
+
 test("Progress exposes compound track, range, label, and value text", () => {
   render(<Provider><Progress.Root value={40} label="Upload"><Progress.Label>Upload</Progress.Label><Progress.Track><Progress.Range data-testid="progress-range" /></Progress.Track><Progress.ValueText data-testid="progress-value" /></Progress.Root></Provider>)
   expect(screen.getByRole("progressbar", { name: "Upload" }).getAttribute("aria-valuenow")).toBe("40")
